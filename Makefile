@@ -18,7 +18,8 @@ KernelOBJ+=$(patsubst $(KernelPath)/%.c, $(TARGET)/kernel/%.o, $(filter %.c, $(K
 ENTRYPOINT=0x7e00
 
 run: build
-	qemu-system-i386 -m 32M -boot c -hda img/transition.img
+	qemu-system-i386 -m 32M \
+		-drive file=image/master.img,if=ide,index=0,media=disk,format=raw
 
 build: $(TARGET) $(IMG)
 
@@ -67,7 +68,8 @@ endif
 # ------- img made
 
 debug: build 
-	qemu-system-i386 -m 32M -boot c -hda img/transition.img -s -S
+	qemu-system-i386 -m 32M \
+		-drive file=image/master.img,if=ide,index=0,media=disk,format=raw -s -S
 
 .PHONY: clean
 clean:
