@@ -1,0 +1,15 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "cppdbg",
+            "name": "TransitionOS",
+            "request": "launch",
+            "program": "${workspaceRoot}/src/target/kernel/os.elf",
+            "cwd": "${workspaceRoot}/src",
+            "MIMode": "gdb",
+            "miDebuggerServerAddress": "localhost:1234",
+            "miDebuggerPath": "/usr/bin/gdb"
+        },
+    ]
+}
