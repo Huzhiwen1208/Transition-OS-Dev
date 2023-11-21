@@ -2,6 +2,8 @@
 ## All in One Pre
 This project belongs to <font color=red>"跨考大家庭"</font>. Everyone wants to learn it should not share it with other persons/students/people. If you did what didn't have been approved by us, we'll fight you!
 
+Named Transistion-OS-Dev, not Transition-OS-Dev
+
 ## Environment establishment
 > Machine: Deepin or Ubuntu20
 
@@ -12,6 +14,9 @@ sudo apt-get install git nasm bximage gcc qemu-system-i386 qemu-utils
 sudo apt-get install gdb # debug using
 ```
 ```shell
+git clone git@github.com:Huzhiwen1208/Transistion-OS-Dev.git
+cd Transistion-OS-Dev
+
 make build # build project
 make run # execute the project
 make debug # should use vscode launch.json with gdb
