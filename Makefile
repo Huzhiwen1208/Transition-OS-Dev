@@ -19,7 +19,7 @@ ENTRYPOINT=0x7e00
 
 run: build
 	qemu-system-i386 -m 32M \
-		-drive file=image/master.img,if=ide,index=0,media=disk,format=raw
+		-drive file=img/transition.img,if=ide,index=0,media=disk,format=raw
 
 build: $(TARGET) $(IMG)
 
@@ -69,7 +69,7 @@ endif
 
 debug: build 
 	qemu-system-i386 -m 32M \
-		-drive file=image/master.img,if=ide,index=0,media=disk,format=raw -s -S
+		-drive file=img/transition.img,if=ide,index=0,media=disk,format=raw -s -S
 
 .PHONY: clean
 clean:
