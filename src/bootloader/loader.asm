@@ -119,7 +119,7 @@ entry_protect_mode:
     mov esp, 0x7000 ; stack top
     
     mov edi, 0x7e00; memory address to load disk content
-    mov ecx, 12; seek disk to 12th sector
+    mov ecx, 4; seek disk to 12th sector
     mov bl, 200; read 200 sectors
     call read_disk
     push ards_cnt

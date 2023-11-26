@@ -2,8 +2,8 @@
 ; 要执行的代码, MBR: Main Boot R
 
 mov edi, 0x500; memory address to load disk content
-mov ecx, 2; seek disk to the second sector
-mov bl, 10; read 10 sectors
+mov ecx, 1; seek disk to the second sector
+mov bl, 3; read 10 sectors
 call read_disk
 
 jmp 0:0x500

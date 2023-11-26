@@ -1,0 +1,11 @@
+{
+    "C_Cpp.errorSquiggles": "disabled",
+    "files.associations": {
+        "console.h": "c",
+        "type.h": "c",
+        "constant.h": "c",
+        "common.h": "c",
+        "sys_io.h": "c",
+        "utils.h": "c"
+    }
+}
