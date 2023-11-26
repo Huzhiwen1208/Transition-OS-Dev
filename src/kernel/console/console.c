@@ -15,11 +15,11 @@ static void setCursor(Cursor cursor);
 /// @brief clear screen
 static void clearScreen();
 
-void ConsoleWrite(const char* buf, u32 len) {
-    ConsoleWriteWithColor(buf, len, WHITE);
+Size ConsoleWrite(const char* buf, Size len) {
+    return ConsoleWriteWithColor(buf, len, WHITE);
 }
 
-void ConsoleWriteWithColor(const char* buf, u32 len, ConsoleColor color) {
+Size ConsoleWriteWithColor(const char* buf, Size len, ConsoleColor color) {
     // 1. find cursor position in byte
     u16* currentPosition = (u16*)getCursorAddress();
     u32 row = getCursor().Row;

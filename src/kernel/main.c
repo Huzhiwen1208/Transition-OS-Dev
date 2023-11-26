@@ -4,5 +4,7 @@
 void TransitionMain() {
     ConsoleInit();
     char* welcome = "Welcome to Transition!\n";
-    ConsoleWriteWithColor(welcome, StringLength(welcome), LIGHT_BLUE);
+    Printf("%s", welcome);
+
+    PrintWithColor(LIGHT_RED, "This is a test for PrintWithColor\n");
 }
