@@ -6,6 +6,6 @@
         "constant.h": "c",
         "common.h": "c",
         "sys_io.h": "c",
-        "utils.h": "c"
+        "lib.h": "c"
     }
 }

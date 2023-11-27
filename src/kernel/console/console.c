@@ -1,5 +1,5 @@
 #include "console.h"
-#include "../utils/utils.h"
+#include "../lib/lib.h"
 
 static Cursor newCursor(u32 row, u32 col);
 /// @brief get screen current address

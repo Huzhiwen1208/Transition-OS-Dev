@@ -9,7 +9,7 @@ Named Transistion-OS-Dev, not Transition-OS-Dev
 
 ```shell
 sudo apt-get update
-sudo apt-get install git nasm bximage gcc qemu-system-i386 qemu-utils
+sudo apt-get install git nasm bximage gcc qemu-system-i386 qemu-lib
 
 sudo apt-get install gdb # debug using
 ```

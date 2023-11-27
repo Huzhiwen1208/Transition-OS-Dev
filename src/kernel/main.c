@@ -1,5 +1,5 @@
 #include "console/console.h"
-#include "utils/utils.h"
+#include "lib/lib.h"
 
 void TransitionMain() {
     ConsoleInit();
