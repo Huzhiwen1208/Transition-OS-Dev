@@ -31,8 +31,8 @@ static char *Number(char *str, u32 *num, i32 base, i32 size, i32 precision, i32 
 {
     char pad, sign, tmp[36];
     const char *digits = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-    Size i;
-    Size index;
+    i32 i;
+    i32 index;
     char *ptr = str;
 
     if (flags & SMALL)
