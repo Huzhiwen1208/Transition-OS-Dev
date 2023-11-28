@@ -1,5 +1,6 @@
 #pragma once
 
+
 typedef unsigned char Boolean;
 typedef unsigned char u8;
 typedef unsigned short u16;
@@ -14,6 +15,5 @@ typedef unsigned int Size;
 // memory manage
 typedef unsigned int PhysicalAddress;
 typedef unsigned int PhysicalPageNumber;
-
 // variable argument
 typedef char *va_list;
