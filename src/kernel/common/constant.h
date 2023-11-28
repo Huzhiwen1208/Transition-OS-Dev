@@ -4,8 +4,8 @@
 
 extern const u32 EOF;
 extern const u32 NULL;
-extern const u8 True;
-extern const u8 False;
+extern const u8 TRUE;
+extern const u8 FALSE;
 
 /// @brief console
 typedef enum ConsoleColor {
@@ -48,3 +48,18 @@ extern const u8 HT;
 extern const u8 LF;
 extern const u8 CR;
 extern const u8 Space;
+
+// Memory Manager
+extern const u32 ManagableMemorySize;
+extern const u32 PageSize;
+extern const u32 PageSizeBits;
+#define MAX_PAGE_COUNT 8192
+extern const u32 KernelPageCount;
+#define BUDDY_PAGES 16
+#define BUDDY_BLOCKS 1024
+
+// Mode
+typedef enum MachineMode {
+    KernelMode,
+    UserMode
+} MachineMode;

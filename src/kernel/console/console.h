@@ -6,8 +6,9 @@ typedef struct Cursor {
     u32 Row, Col; // current Cursor position
 } Cursor;
 
-Size ConsoleWrite(const char* buf, u32 len);
-Size ConsoleWriteWithColor(const char* buf, u32 len, ConsoleColor color);
+Size ConsoleWrite(const char* buf, Size len);
+Size ConsoleWriteWithColor(const char* buf, Size len, ConsoleColor color);
+void ConsoleAlignLine();
 
 /// @brief clear the screen and initialize
-void ConsoleInit();
+void InitConsole();

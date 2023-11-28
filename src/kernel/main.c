@@ -1,15 +1,14 @@
 #include "console/console.h"
 #include "lib/lib.h"
+#include "memory/memory.h"
 
 void TransitionMain() {
-    ConsoleInit();
+    InitConsole();
+    InitMemoryManager();
     char* welcome = "Welcome to Transition!\n";
     Printf("%s", welcome);
-    u32 count = 0;
-    
 
-    while (1) {
-        PrintWithColor(LIGHT_RED, "This is a test for PrintWithColor %d\n", count);
-        count ++;
-    }
+    char* m = Malloc(10);
+    *m = 'H';
+    *(m+1) = 'E';
 }
