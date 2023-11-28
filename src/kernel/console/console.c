@@ -15,6 +15,13 @@ static void setCursor(Cursor cursor);
 /// @brief clear screen
 static void clearScreen();
 
+void ConsoleAlignLine() {
+    Cursor cursor = getCursor();
+    if (cursor.Col != 0) {
+        ConsoleWrite("\n", 1);
+    }
+}
+
 Size ConsoleWrite(const char* buf, Size len) {
     return ConsoleWriteWithColor(buf, len, WHITE);
 }
@@ -96,7 +103,7 @@ Size ConsoleWriteWithColor(const char* buf, Size len, ConsoleColor color) {
     return len;
 }
 
-void ConsoleInit() {
+void InitConsole() {
     setScreenAddress(MonitorBaseAddress);
     setCursor(newCursor(0, 0));
     clearScreen();

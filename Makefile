@@ -32,6 +32,7 @@ ifeq ($(wildcard $(TARGET)),)
 	@mkdir -p $(TARGET)/kernel/common
 	@mkdir -p $(TARGET)/kernel/console
 	@mkdir -p $(TARGET)/kernel/lib
+	@mkdir -p $(TARGET)/kernel/memory
 endif
 
 # .c, .asm ---> .o ------
