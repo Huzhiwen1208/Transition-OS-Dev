@@ -1,4 +1,12 @@
 # Transition-OS-Dev
+## 前情提要
+- CPU：I386
+- 内存：32MB
+- 汇编代码：x86（NASM）+ AT&T语法格式
+- 内存布局：
+    <div align=center><img src="images/layout.png" width="70%" height="70%"></div>
+- 寄存器：
+    <div align=center><img src="images/register.png" width="70%" height="70%"></div>
 ## 环境搭建
 > 计算机类型: Deepin or Ubuntu20
 
@@ -42,12 +50,20 @@ make debug # should use vscode launch.json with gdb
 6. 每个内容块都会单独开个分支，每个分支对应了一个README.md中的二级标题。其中所有的资源采用垂直记录。分支只能采用PR形式提交到master，并做好合并说明。
 
 ## 进入内核
-- 对应分支：master
+- 对应分支：feat/entry-kernel
 - 内容概述：实现了从裸机（CPU，内存，硬盘）进入内核。
+- 详情链接：[进入内核文字描述](https://m13n4gzucg.feishu.cn/docx/GXrSdE7z7ojMMFxAUA2cvXx0nVc)
+  
 在你的虚拟机（或者物理机，总之是你的运行代码的物理机不是远程开发机）上执行`make run`，你会看到类似下图的界面，那么恭喜你你的初始环境搭建好了。当然，如果出现难以解决的问题，请联系我的邮箱`jackhu.521.rose@gmail.com`。我会把它贴在FAQ中。如果我遇到什么问题，也会分享到FAQ中。
 
 <div align=center><img src="images/initializing.png" width="50%" height="50%"></div>
 
+## 显存控制台 & 内存管理
+- 对应分支：feat/console-and-memory
+- 内容概述：实现了内核控制台输出，日志输出，还进行了物理页帧分配管理器初始化，使用伙伴算法实现内核堆内存管理。
+- 详情链接：[文本显存和内存管理初步]()
+  
+在你的虚拟机（或者物理机，总之是你的运行代码的物理机不是远程开发机）上执行`make run`，你会看到类似下图的界面，那么恭喜你实现了输出和内存管理初步。后续会使用键盘中断实现输入。当然，如果出现难以解决的问题，请联系我的邮箱`jackhu.521.rose@gmail.com`。我会把它贴在FAQ中。如果我遇到什么问题，也会分享到FAQ中。
 
 ## FAQ
 1. 在操作系统中，数组下标越界是没有Warning和Error的，所以在开发中如果出现了下标越界，可能访问到其他我们并不想读/写的数据，所以需要严谨对待数组下标越界。
