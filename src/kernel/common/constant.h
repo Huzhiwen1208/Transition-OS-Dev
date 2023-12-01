@@ -63,3 +63,6 @@ typedef enum MachineMode {
     KernelMode,
     UserMode
 } MachineMode;
+
+// Data structure
+#define HASH_TABLE_SIZE 101

@@ -1,25 +1,25 @@
 #include "console/console.h"
 #include "lib/lib.h"
+#include "ds/ds.h"
 #include "memory/memory.h"
 
 void TransitionMain() {
     InitConsole();
-    Printf("Welcome to Transition OS!");
-    Info("This is a test for log");
     InitMemoryManager();
+    Printf("Welcome to Transition OS!");
 
-    char* message = (char*)Malloc(100);
-    i32* arr = (i32*)Malloc(sizeof(i32) * 10);
-    u8* bytes = (u8*)Malloc(sizeof(u8) * 1025);
+    HashTable* map = NewMap("string", "string");
+    char* v =  (char*)map->Get(map, "hello");
 
-    *message = 'H';
-    *(message + 1) = 'E';
-    Assert(StringLength(message) == 2);
-    Assert(StringEqual(message, "HE"));
+    map->Put(map, "hello", "world");
+    map->Put(map, "hello1", "world2");
+    map->Put(map, "hello2", "world3");
+    v = map->Get(map, "hello2");
+    map->Put(map, "hello2", "world4");
+    v = map->Get(map, "hello2");
+    map->Delete(map, "hello2");
 
-    *(arr + 3) = 267;
+    v = map->Get(map, "hello2");
 
-    Free(bytes);
-    Free(arr);
-    Free(message);
+    DeleteMap(&map);
 }

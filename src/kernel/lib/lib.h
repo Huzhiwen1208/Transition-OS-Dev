@@ -37,6 +37,8 @@ void MemorySet(void* ptr, u8 value, Size size);
 // string
 Size StringLength(const char* str);
 Boolean StringEqual(const char* str1, const char* str2);
+u32 StringToInt32(const char* str);
+u32 StringASCIITotal(const char* str);
 Boolean IsDigit(char c);
 Boolean IsAlpha(char c);
 Boolean IsUpper(char c);

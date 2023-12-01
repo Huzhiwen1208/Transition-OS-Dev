@@ -22,6 +22,27 @@ Boolean StringEqual(const char* str1, const char* str2) {
     return TRUE;
 }
 
+u32 StringToInt32(const char* str) {
+    u32 result = 0;
+    Size len = StringLength(str);
+    for (Size i = 0; i < len; i++) {
+        if (!IsDigit(str[i])) {
+            Panic("StringToInt32: string {%s} is not a number.", str);
+        }
+        result = result * 10 + str[i] - '0';
+    }
+    return result;
+}
+
+u32 StringASCIITotal(const char* str) {
+    u32 result = 0;
+    Size len = StringLength(str);
+    for (Size i = 0; i < len; i++) {
+        result += str[i];
+    }
+    return result;
+}
+
 Boolean IsDigit(char c) {
     return c >= '0' && c <= '9';
 }
