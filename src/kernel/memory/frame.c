@@ -1,6 +1,4 @@
-#include "memory.h"
-#include "type.h"
-#include "../lib/lib.h"
+#include "mod.h"
 
 FrameAllocator frameAllocator;
 static void globalFrameAllocatorInit();

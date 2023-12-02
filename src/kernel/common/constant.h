@@ -66,3 +66,7 @@ typedef enum MachineMode {
 
 // Data structure
 #define HASH_TABLE_SIZE 101
+
+// Interrupt
+#define INTERRUPT_COUNT 256
+#define EXCEPTION_COUNT 32

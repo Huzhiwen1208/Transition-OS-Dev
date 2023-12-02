@@ -1,6 +1,4 @@
-#include "memory.h"
-#include "type.h"
-#include "../lib/lib.h"
+#include "mod.h"
 
 BuddyAllocator globalBuddyAllocator;
 

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../common/common.h"
+#include "type.h"
 
 // log
 void DebugHandle(const char *file, i32 line, const char *fmt, ...);

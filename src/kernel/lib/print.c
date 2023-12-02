@@ -1,6 +1,4 @@
-#include "lib.h"
-#include "../common/common.h"
-#include "../console/console.h"
+#include "mod.h"
 
 #define ZEROPAD 0x01
 #define SIGN 0x02

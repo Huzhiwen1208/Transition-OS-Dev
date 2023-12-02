@@ -1,4 +1,4 @@
-#include "lib.h"
+#include "mod.h"
 
 void Suspend() {
     while (1) {
