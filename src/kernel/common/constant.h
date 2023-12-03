@@ -70,3 +70,6 @@ typedef enum MachineMode {
 // Interrupt
 #define INTERRUPT_COUNT 256
 #define EXCEPTION_COUNT 32
+
+// Task PCB
+#define MAX_PROCESS_COUNT 1024

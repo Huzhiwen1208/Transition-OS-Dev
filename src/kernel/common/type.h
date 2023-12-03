@@ -11,6 +11,7 @@ typedef short i16;
 typedef int i32;
 typedef long long i64;
 typedef unsigned int Size;
+typedef unsigned int PID;
 
 #define StructNotAlign __attribute__((packed));
 
