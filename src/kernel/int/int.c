@@ -10,6 +10,7 @@ static void initDefaultInterruptHandler();
 
 
 void InitInterrupt() {
+    InitializeGDT();
     InitializeIDT();
     initInterruptInfoMap();
     initDefaultInterruptHandler();

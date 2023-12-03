@@ -32,3 +32,11 @@ const u32 ManagableMemorySize = 0x2000000; // 32MB
 const u32 PageSize = 0x1000; // 4KB
 const u32 PageSizeBits = 12;
 const u32 KernelPageCount = 0x400; // 4MB
+
+
+// Descriptor
+const u32 KernelCodeSegmentSelector = 1 << 3;
+const u32 KernelDataSegmentSelector = 2 << 3;
+const u32 TSSSegmentSelector = 3 << 3;
+const u32 UserCodeSegmentSelector = 4 << 3 | 3;
+const u32 UserDataSegmentSelector = 5 << 3 | 3;

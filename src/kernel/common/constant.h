@@ -73,3 +73,11 @@ typedef enum MachineMode {
 
 // Task PCB
 #define MAX_PROCESS_COUNT 1024
+
+// Descriptor
+#define SEGMENT_COUNT 8192
+extern const u32 KernelCodeSegmentSelector;
+extern const u32 KernelDataSegmentSelector;
+extern const u32 UserCodeSegmentSelector;
+extern const u32 UserDataSegmentSelector;
+extern const u32 TSSSegmentSelector;

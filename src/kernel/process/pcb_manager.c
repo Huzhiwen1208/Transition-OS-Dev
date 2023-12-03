@@ -1,13 +1,17 @@
 #include "mod.h"
 
-extern void __switch(PhysicalAddress* currentKernelSP, PhysicalAddress* nextKernelSP);
+extern void SwitchProcess(PhysicalAddress* currentKernelSP, PhysicalAddress* nextKernelSP);
 static ProcessManager processManager;
 static PIDAllocator pidAllocator;
 static PCB* idleProcess;
 
 static PCB* fetchProcess();
-void runFirstProcess();
-static void idle();
+static void runFirstProcess();
+static void idle() {
+    while (TRUE) {
+        Schedule();
+    }
+}
 
 
 void InitProcessManager() {
@@ -15,7 +19,6 @@ void InitProcessManager() {
     processManager.RunnableProcesses = NewQueue("PCB*", MAX_PROCESS_COUNT);
     CreateKernelProcess(idle);
     idleProcess = fetchProcess();
-    Schedule();
 }
 
 void AddProcess(PCB* process) {
@@ -53,7 +56,7 @@ void Schedule() {
     next->Status = PROCESS_STATE_RUNNING;
 
     processManager.Current = next;
-    __switch(current->KernelStackPointer, next->KernelStackPointer);
+    SwitchProcess(current, next);
 }
 
 void runFirstProcess() {
@@ -61,19 +64,12 @@ void runFirstProcess() {
     next->Status = PROCESS_STATE_RUNNING;
 
     PCB unused;
+    PCB* unusedPtr = &unused;
     processManager.Current = next;
-    __switch(unused.KernelStackPointer, next->KernelStackPointer);
+    SwitchProcess(unusedPtr, next);
 }
 
 static PCB* fetchProcess() {
     PCB* process = processManager.RunnableProcesses->Pop(processManager.RunnableProcesses);
     return process == NULL? idleProcess: process;
-}
-
-static void idle() {
-    while (TRUE) {
-        asm volatile ("sti");
-        asm volatile ("hlt");
-        Schedule();
-    }
 }

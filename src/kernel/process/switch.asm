@@ -1,9 +1,9 @@
 [bits 32]
 section .text
 
-; void SwitchProcess(PhysicalAddress* currentKernelSP, PhysicalAddress* nextKernelSP);
-global __switch
-__switch:
+; void SwitchProcess(PCB* current, PCB* next);
+global SwitchProcess
+SwitchProcess:
     push ebp
     push ebx
     push esi

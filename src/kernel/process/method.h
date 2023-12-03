@@ -2,3 +2,4 @@
 
 void InitProcessManager();
 void CreateKernelProcess(void* entry);
+void Schedule();
