@@ -131,7 +131,7 @@ InterruptHandlerEntryTable:
 
 global RestoreContext
 RestoreContext:
-    add esp, 4; pop %1
+    add esp, 4; pop vector
     ; restore context
     popad
     pop gs

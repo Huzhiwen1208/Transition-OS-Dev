@@ -1,10 +1,10 @@
 AsmCompile=nasm
-CCompile=gcc
+CCompile=x86_64-elf-gcc
 IMG=img/transition.img
 
-GccFlags=-m32 -fno-builtin -fno-stack-protector -march=pentium
+GccFlags=-m32 -fno-builtin -fno-stack-protector -mno-sse
 GccFlags+=-w -nostdinc -nostdlib -fno-pic -fno-pie -g
-LdFlags=-m elf_i386 -static
+LdFlags=-m elf_i386 -static -w
 
 TARGET=src/target
 BootLoader=src/bootloader
@@ -56,9 +56,9 @@ $(TARGET)/bootloader/%.bin: $(BootLoader)/%.asm
 # kernel made ----- 
 # replace ld, objcopy in linux:binutils with ld.lld, llvm-objcopy in macos:llvm
 $(ELFKernel): $(KernelOBJ)
-	ld $(LdFlags) -Ttext $(ENTRYPOINT) $^ -o $@
+	ld.lld $(LdFlags) -Ttext $(ENTRYPOINT) $^ -o $@
 $(NakedKernel): $(ELFKernel)
-	objcopy -O binary $< $@
+	llvm-objcopy -O binary $< $@
 # ------ kernel made
 
 # img made --------

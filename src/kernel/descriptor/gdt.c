@@ -121,3 +121,7 @@ void InitializeGDT() {
 
     asm volatile("lgdt %0" ::"m"(GDTR));
 }
+
+void SetTSSEsp0(u32 esp0) {
+    TSS.ESP0 = esp0;
+}

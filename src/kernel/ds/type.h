@@ -30,6 +30,7 @@ typedef struct Queue {
 
     void (*Push)(struct Queue* self, void* value);
     void* (*Pop)(struct Queue* self);
+    Boolean (*Empty)(struct Queue* self);
 } Queue;
 
 // priority queue

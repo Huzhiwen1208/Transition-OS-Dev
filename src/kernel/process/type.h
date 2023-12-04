@@ -1,7 +1,7 @@
 #pragma once
 
 #include "../common/mod.h"
-#include "../ds/mod.h"
+#include "../ds/type.h"
 
 // Process
 typedef enum ProcessState {

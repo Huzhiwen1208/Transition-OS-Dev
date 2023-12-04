@@ -64,7 +64,7 @@ struct TaskStateSegment {
     u32 FS;
     u32 GS;
     u32 LDTR;          // local descriptor table segment selector
-    u16 Trace : 1;     // if 1, will cause an interrupt when a task switch occurs
+    u8 Trace : 1;     // if 1, will cause an interrupt when a task switch occurs
     u16 Reserved : 15; // unused
     u16 IOBase;
     u32 SSP;

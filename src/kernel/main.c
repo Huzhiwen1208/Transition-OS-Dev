@@ -10,7 +10,10 @@ void ProcessA() {
     u32 count = 0;
     while (TRUE) {
         count ++;
-        Test();
+        TimeValue time;
+        GetTime(&time);
+        Printf("Process A ms: %d\n", time.Second * 1000 + time.MicroSecond / 1000);
+        Yield();
         if (count > 3) break;
     }
     Suspend();
@@ -21,9 +24,20 @@ void ProcessB() {
     u32 count = 0;
     while (TRUE) {
         count ++;
-        Printf("B: ");
-        Test();
+        TimeValue time;
+        GetTime(&time);
+        Printf("Process B ms: %d\n", time.Second * 1000 + time.MicroSecond / 1000);
+        Yield();
         if (count > 3) break;
+    }
+    Suspend();
+}
+
+void UserProcess() {
+    u32 count = 0;
+    while (TRUE) {
+        u32 count = 0;
+        count ++;
     }
     Suspend();
 }
@@ -35,6 +49,5 @@ void TransitionMain() {
     InitializeInterrupt();
     InitializeProcessManager();
 
-    CreateKernelProcess(ProcessA);
-    CreateKernelProcess(ProcessB);
+    CreateUserProcess(UserProcess);
 }

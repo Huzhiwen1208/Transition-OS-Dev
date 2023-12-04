@@ -17,6 +17,7 @@ Queue* NewQueue(char* type, i32 size) {
 
     queue->Push = Push;
     queue->Pop = Pop;
+    queue->Empty = Empty;
     return queue;
 }
 

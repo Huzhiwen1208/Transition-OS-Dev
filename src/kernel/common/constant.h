@@ -83,6 +83,7 @@ extern const float MSPerTick;
 
 // Task PCB
 #define MAX_PROCESS_COUNT 1024
+extern const u32 UserStackTop;
 
 // Descriptor
 #define SEGMENT_COUNT 8192
@@ -94,3 +95,5 @@ extern const u32 TSSSegmentSelector;
 
 // System call number
 #define SYSCALL_TEST 1
+#define SYSCALL_TIME 2
+#define SYSCALL_YIELD 3

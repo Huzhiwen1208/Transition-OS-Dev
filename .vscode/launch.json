@@ -9,7 +9,7 @@
             "cwd": "${workspaceRoot}/src",
             "MIMode": "gdb",
             "miDebuggerServerAddress": "localhost:1234",
-            "miDebuggerPath": "/usr/bin/gdb",
+            "miDebuggerPath": "/usr/local/bin/gdb",
             "setupCommands": [
                 {
                     "description": "Enable pretty-printing for gdb",
