@@ -1,9 +1,7 @@
 #include "mod.h"
 
 void Suspend() {
-    while (1) {
-        asm volatile ("hlt");
-    }
+    while (1);
 }
 
 void AssertFailed(char *exp, char *file, char *base, i32 line) {

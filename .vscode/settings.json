@@ -10,6 +10,7 @@
         "memory.h": "c",
         "method.h": "c",
         "ds.h": "c",
-        "mod.h": "c"
+        "mod.h": "c",
+        "stdlib.h": "c"
     }
 }

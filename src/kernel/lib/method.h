@@ -69,3 +69,7 @@ void Test();
 void GetTimeValue(TimeValue* tv);
 /// @brief 让出CPU
 void Yield();
+/// @brief 写控制台, 阴极射线管显示器
+Size Write(char* buf, Size len, ConsoleColor color);
+/// @brief 进程睡眠
+void Sleep(u32 ms);

@@ -19,3 +19,21 @@ void GetTimeValue(TimeValue* tv) {
 void Yield() {
     SystemCall(SYSCALL_YIELD, 0, 0, 0);
 }
+
+Size Write(char* buf, Size len, ConsoleColor color) {
+    SystemCall(SYSCALL_WRITE, (u32)buf, len, (u32)color);
+}
+
+void Sleep(u32 ms) {
+    TimeValue tv;
+    GetTimeValue(&tv);
+    u32 entryMS = tv.Second * 1000 + tv.MicroSecond / 1000;
+
+    while(TRUE) {
+        GetTimeValue(&tv);
+        u32 currentMS = tv.Second * 1000 + tv.MicroSecond / 1000;
+        if (currentMS >= ms + entryMS)
+            break;
+        Yield();
+    }
+}

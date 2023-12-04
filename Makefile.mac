@@ -1,0 +1,19 @@
+include Makefile
+
+CCompile=x86_64-elf-gcc
+GccFlags=-m32 -fno-builtin -fno-stack-protector -mno-sse
+GccFlags+=-w -nostdinc -nostdlib -fno-pic -fno-pie -g
+
+# replace ld, objcopy in linux:binutils with ld.lld, llvm-objcopy in macos:llvm
+$(ELFKernel): $(KernelOBJ) $(UserOBJ)
+	ld.lld $(LdFlags) -Ttext $(ENTRYPOINT) $^ -o $@
+$(NakedKernel): $(ELFKernel)
+	llvm-objcopy -O binary $< $@
+
+image:
+ifeq ($(wildcard img),)
+	@mkdir img
+endif
+ifeq ($(wildcard $(IMG)),)
+	bximage -q -hd=128 -func=create -sectsize=512 -imgmode=flat $(IMG)
+endif

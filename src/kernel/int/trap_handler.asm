@@ -1,9 +1,9 @@
 [bits 32]
 
 extern TrapHandler
-extern RestoreContext
 section .text
 global AllTrapsEntry
+global RestoreContext
 AllTrapsEntry:
     ; entry trap handler by "int 0x80"
     push 0x88888888
@@ -23,4 +23,14 @@ AllTrapsEntry:
 
     mov dword [esp + 8*4], eax ; save eax => stack, return value
 
-    jmp RestoreContext
+RestoreContext:
+    add esp, 4; pop vector
+    ; restore context
+    popad
+    pop gs
+    pop fs
+    pop es
+    pop ds
+    add esp, 4; pop 0x88888888/error code
+
+    iret

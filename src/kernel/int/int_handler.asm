@@ -9,16 +9,26 @@ InterruptHandler_%1:
 %ifn %2
     push ErrCodeMagic
 %endif
-    ; save context 
+    ; save context
     push ds
     push es
     push fs
     push gs
     pushad
 
-    push %1
+    push %1; vector
     call [InterruptHandlerList + %1 * 4]
-    jmp RestoreContext
+
+    add esp, 4; pop vector
+    ; restore context
+    popad
+    pop gs
+    pop fs
+    pop es
+    pop ds
+    add esp, 4; pop 0x88888888/error code
+
+    iret
     
 %endmacro
 
@@ -128,16 +138,3 @@ InterruptHandlerEntryTable:
     dd InterruptHandler_0x2d
     dd InterruptHandler_0x2e
     dd InterruptHandler_0x2f
-
-global RestoreContext
-RestoreContext:
-    add esp, 4; pop vector
-    ; restore context
-    popad
-    pop gs
-    pop fs
-    pop es
-    pop ds
-    add esp, 4; pop 0x88888888/error code
-
-    iret

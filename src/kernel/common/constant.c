@@ -34,7 +34,6 @@ const u32 PageSizeBits = 12;
 const u32 KernelPageCount = 0x400; // 4MB
 
 // Task
-const u32 UserStackTop = 0x1800000; // 24MB
 
 // Interrupt
 const u16 ClockCounter0 = 0x40;

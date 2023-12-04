@@ -6,16 +6,20 @@ GccFlags=-m32 -fno-builtin -fno-stack-protector -march=pentium
 GccFlags+=-w -nostdinc -nostdlib -fno-pic -fno-pie -g
 LdFlags=-m elf_i386 -static
 
-TARGET=src/target
+TARGET=target
 BootLoader=src/bootloader
 KernelPath=src/kernel
+UserPath=src/user
+
 ELFKernel=$(TARGET)/kernel/os.elf
 NakedKernel=$(TARGET)/kernel/os.bin
 KernelSourceFile=$(wildcard $(KernelPath)/*.c) $(wildcard $(KernelPath)/*.asm)
 KernelSourceFile+=$(wildcard $(KernelPath)/*/*.c) $(wildcard $(KernelPath)/*/*.asm)
+UserSourceFile=$(wildcard $(UserPath)/*.c)
 
 KernelOBJ=$(patsubst $(KernelPath)/%.asm, $(TARGET)/kernel/%.o, $(filter %.asm, $(KernelSourceFile)))
 KernelOBJ+=$(patsubst $(KernelPath)/%.c, $(TARGET)/kernel/%.o, $(filter %.c, $(KernelSourceFile)))
+UserOBJ=$(patsubst $(UserPath)/%.c, $(TARGET)/user/%.o, $(filter %.c, $(UserSourceFile)))
 ENTRYPOINT=0x7e00
 
 run: build
@@ -38,12 +42,14 @@ ifeq ($(wildcard $(TARGET)),)
 	@mkdir -p $(TARGET)/kernel/descriptor
 	@mkdir -p $(TARGET)/kernel/process
 	@mkdir -p $(TARGET)/kernel/syscall
+	@mkdir -p $(TARGET)/user
 endif
 
 # .c, .asm ---> .o ------
 $(TARGET)/kernel/%.o: $(KernelPath)/%.c
 	$(CCompile) $(GccFlags) -c -o $@ $<
-
+$(TARGET)/user/%.o: $(UserPath)/%.c
+	$(CCompile) $(GccFlags) -c -o $@ $<
 $(TARGET)/kernel/%.o: $(KernelPath)/%.asm
 	$(AsmCompile) -f elf32 -g $< -o $@ 
 # ----- .c, .asm ---> .o
@@ -54,7 +60,6 @@ $(TARGET)/bootloader/%.bin: $(BootLoader)/%.asm
 # ------ bootloader
 
 # kernel made ----- 
-# replace ld, objcopy in linux:binutils with ld.lld, llvm-objcopy in macos:llvm
 $(ELFKernel): $(KernelOBJ)
 	ld $(LdFlags) -Ttext $(ENTRYPOINT) $^ -o $@
 $(NakedKernel): $(ELFKernel)
@@ -81,8 +86,18 @@ debug: build
 	qemu-system-i386 -m 32M \
 		-drive file=img/transition.img,if=ide,index=0,media=disk,format=raw -s -S
 
+run-mac:
+	@make -f Makefile.mac run
+
+debug-mac:
+	@make -f Makefile.mac debug
+
+build-mac:
+	@make -f Makefile.mac build
+
 .PHONY: clean
 clean:
 	rm -rf *.bin *.o *.lock *.ini *.s *.asm
 	rm -rf img
 	rm -rf src/target
+	rm -rf target

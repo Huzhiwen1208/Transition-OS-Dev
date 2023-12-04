@@ -2,6 +2,9 @@
 
 extern void RestoreContext();
 
+/// @brief 让栈指针指向Interrupt Context方便返回用户态
+static void restore();
+
 void CreateKernelProcess(void* entry) {
     PCB* process = (PCB*)Malloc(sizeof(PCB));
     process->ID = AllocatePID();
@@ -48,11 +51,11 @@ void CreateUserProcess(void* entry) {
     trapContext->CS = UserCodeSegmentSelector;
     trapContext->PSW = 0x202; // 0000 0010 0000 0010
     trapContext->SS3 = UserDataSegmentSelector;
-    trapContext->ESP3 = UserStackTop;
+    trapContext->ESP3 = AllocateOnePage(UserMode) + PageSize;
 
     stack -= sizeof(SwitchContext);
     SwitchContext* context = (SwitchContext*)stack;
-    context->EIP = RestoreContext;
+    context->EIP = restore;
     context->EBP = 0;
     context->ESI = 0;
     context->EDI = 0;
@@ -60,4 +63,13 @@ void CreateUserProcess(void* entry) {
     process->KernelStackPointer = (PhysicalAddress*)stack;
 
     AddProcess(process);
+}
+
+
+static void restore() {
+    PCB* current = GetCurrentProcess();
+    u32 stack = ((u32)current->KernelStackPointer + PageSize - 1) / PageSize * PageSize;
+    stack -= sizeof(InterruptContext);
+    asm volatile ("movl %0, %%esp" : : "m"(stack));
+    asm volatile ("jmp RestoreContext");
 }

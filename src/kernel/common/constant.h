@@ -97,3 +97,4 @@ extern const u32 TSSSegmentSelector;
 #define SYSCALL_TEST 1
 #define SYSCALL_TIME 2
 #define SYSCALL_YIELD 3
+#define SYSCALL_WRITE 4

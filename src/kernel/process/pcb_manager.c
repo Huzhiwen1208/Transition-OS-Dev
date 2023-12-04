@@ -20,6 +20,10 @@ void InitializeProcessManager() {
     idleProcess = fetchProcess();
 }
 
+PCB* GetCurrentProcess() {
+    return processManager.Current;
+}
+
 void AddProcess(PCB* process) {
     processManager.RunnableProcesses->Push(processManager.RunnableProcesses, process);
 }
@@ -60,7 +64,7 @@ void Schedule() {
 
     PCB* next = fetchProcess();
     next->Status = PROCESS_STATE_RUNNING;
-    // 下一个进程为用户进程时，需要设置TSS的ESP0
+    // 下一个进程为用户进程时，需要设置TSS的ESP0为内核栈栈顶，ceil(按页对齐)
     if (next->Type == PROCESS_TYPE_USER) {
         SetTSSEsp0(((u32)next->KernelStackPointer + PageSize - 1) / PageSize * PageSize);
     }

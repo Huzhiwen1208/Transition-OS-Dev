@@ -29,6 +29,10 @@ static TaskStateSegment TSS;
     global_descriptor_table_end: 
 */
 void InitializeGDT() {
+    GDTR.Limit = sizeof(GDT) - 1;
+    GDTR.Base = (u32)GDT;
+    asm volatile("lgdt %0" ::"m"(GDTR));
+
     GDT[0].LimitLow = 0;
     GDT[0].BaseLow = 0;
     GDT[0].Type = 0;
@@ -76,7 +80,7 @@ void InitializeGDT() {
     TSS.IOBase = sizeof(TSS);
 
     GDT[3].LimitLow = (sizeof(TSS) - 1) & 0xffff;
-    GDT[3].BaseLow = (u32)&TSS & 0xffffff; // 24 bits
+    GDT[3].BaseLow = ((u32)&TSS) & 0xffffff; // 24 bits
     GDT[3].Type = 0b1001; // TSS(Available 32-bit TSS)
     GDT[3].Segment = 0; // System Segment
     GDT[3].DPL = 0;
@@ -86,7 +90,9 @@ void InitializeGDT() {
     GDT[3].LongMode = 0;
     GDT[3].DefaultOperationSize = 0; // 16-bit
     GDT[3].Granularity = 0; // 1 byte
-    GDT[3].BaseHigh = ((u32)&TSS >> 24) & 0xff; // 8 bits
+    GDT[3].BaseHigh = (((u32)&TSS) >> 24) & 0xff; // 8 bits
+    // 加载Tss
+    asm volatile("ltr %%ax\n" : : "a"(TSSSegmentSelector));
 
     // User Code
     GDT[4].LimitLow = 0xffff;
@@ -116,10 +122,6 @@ void InitializeGDT() {
     GDT[5].Granularity = 1;
     GDT[5].BaseHigh = 0;
 
-    GDTR.Limit = sizeof(GDT) - 1;
-    GDTR.Base = (u32)GDT;
-
-    asm volatile("lgdt %0" ::"m"(GDTR));
 }
 
 void SetTSSEsp0(u32 esp0) {

@@ -14,18 +14,17 @@ static void setCursor(Cursor cursor);
 /// @brief clear screen
 static void clearScreen();
 
-void ConsoleAlignLine() {
+static void ConsoleAlignLine() {
     Cursor cursor = getCursor();
     if (cursor.Col != 0) {
-        ConsoleWrite("\n", 1);
+        ConsoleWriteWithColor("\n", 1, WHITE);
     }
 }
 
-Size ConsoleWrite(const char* buf, Size len) {
-    return ConsoleWriteWithColor(buf, len, WHITE);
-}
-
 Size ConsoleWriteWithColor(const char* buf, Size len, ConsoleColor color) {
+    if (color != WHITE) {
+        ConsoleAlignLine();
+    }
     // 1. find cursor position in byte
     u16* currentPosition = (u16*)getCursorAddress();
     u32 row = getCursor().Row;
