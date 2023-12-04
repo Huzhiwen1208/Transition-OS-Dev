@@ -37,6 +37,7 @@ ifeq ($(wildcard $(TARGET)),)
 	@mkdir -p $(TARGET)/kernel/int
 	@mkdir -p $(TARGET)/kernel/descriptor
 	@mkdir -p $(TARGET)/kernel/process
+	@mkdir -p $(TARGET)/kernel/syscall
 endif
 
 # .c, .asm ---> .o ------

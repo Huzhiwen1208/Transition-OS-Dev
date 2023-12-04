@@ -59,3 +59,7 @@ void AssertFailed(char *exp, char *file, char *base, i32 line);
 
 #define Assert(exp) \
     if (!(exp)) AssertFailed(#exp, __FILE__, __BASE_FILE__, __LINE__)
+
+
+// SystemCall
+void Test();

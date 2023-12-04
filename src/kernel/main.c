@@ -7,26 +7,34 @@
 
 void ProcessA() {
     asm volatile ("sti");
+    u32 count = 0;
     while (TRUE) {
-        Printf("ProcessA: time = %d\n", GetTimeMS());
+        count ++;
+        Test();
+        if (count > 3) break;
     }
+    Suspend();
 }
 
 void ProcessB() {
     asm volatile ("sti");
+    u32 count = 0;
     while (TRUE) {
-        Printf("ProcessB: time = %d\n", GetTimeMS());
+        count ++;
+        Printf("B: ");
+        Test();
+        if (count > 3) break;
     }
+    Suspend();
 }
 
 void TransitionMain() {
     InitializeConsole();
-    Printf("Welcome to Transition OS!");
+    Printf("Welcome to Transition OS!\n");
     InitializeMemoryManager();
     InitializeInterrupt();
     InitializeProcessManager();
 
     CreateKernelProcess(ProcessA);
     CreateKernelProcess(ProcessB);
-    Schedule();
 }

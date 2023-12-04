@@ -91,3 +91,6 @@ extern const u32 KernelDataSegmentSelector;
 extern const u32 UserCodeSegmentSelector;
 extern const u32 UserDataSegmentSelector;
 extern const u32 TSSSegmentSelector;
+
+// System call number
+#define SYSCALL_TEST 1

@@ -18,17 +18,8 @@ InterruptHandler_%1:
 
     push %1
     call [InterruptHandlerList + %1 * 4]
-    add esp, 4; pop %1
-
-    ; restore context
-    popad
-    pop gs
-    pop fs
-    pop es
-    pop ds
-    add esp, 4; pop 0x88888888/error code
-
-    iret
+    jmp RestoreContext
+    
 %endmacro
 
 InterruptHandlerMacro 0x00, 0; 0x00 #DE Divide Error
@@ -137,3 +128,16 @@ InterruptHandlerEntryTable:
     dd InterruptHandler_0x2d
     dd InterruptHandler_0x2e
     dd InterruptHandler_0x2f
+
+global RestoreContext
+RestoreContext:
+    add esp, 4; pop %1
+    ; restore context
+    popad
+    pop gs
+    pop fs
+    pop es
+    pop ds
+    add esp, 4; pop 0x88888888/error code
+
+    iret
