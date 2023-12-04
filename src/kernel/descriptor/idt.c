@@ -6,7 +6,7 @@ static DescriptorTablePointer IDTR;
 
 
 void InitializeIDT() {
-    for (i32 i = 0; i < EXCEPTION_COUNT; i++) {
+    for (i32 i = 0; i < EXCEPTION_COUNT + OUTERAL_INTERRUPT_COUNT; i++) {
         void* handler = InterruptHandlerEntryTable[i];
         IDT[i].OffsetLow = (u32)handler & 0xFFFF;
         IDT[i].Selector = 1 << 3;

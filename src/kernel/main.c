@@ -6,23 +6,25 @@
 #include "process/mod.h"
 
 void ProcessA() {
+    asm volatile ("sti");
     while (TRUE) {
-        Printf("A");
+        Printf("ProcessA: time = %d\n", GetTimeMS());
     }
 }
 
 void ProcessB() {
+    asm volatile ("sti");
     while (TRUE) {
-        Printf("B");
+        Printf("ProcessB: time = %d\n", GetTimeMS());
     }
 }
 
 void TransitionMain() {
-    InitConsole();
+    InitializeConsole();
     Printf("Welcome to Transition OS!");
-    InitMemoryManager();
-    InitInterrupt();
-    InitProcessManager();
+    InitializeMemoryManager();
+    InitializeInterrupt();
+    InitializeProcessManager();
 
     CreateKernelProcess(ProcessA);
     CreateKernelProcess(ProcessB);

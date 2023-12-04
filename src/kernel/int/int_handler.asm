@@ -67,6 +67,24 @@ InterruptHandlerMacro 0x1d, 0; reserved
 InterruptHandlerMacro 0x1e, 0; reserved
 InterruptHandlerMacro 0x1f, 0; reserved
 
+; 外中断
+InterruptHandlerMacro 0x20, 0; clock interrupt
+InterruptHandlerMacro 0x21, 0; keyboard interrupt
+InterruptHandlerMacro 0x22, 0; cascade
+InterruptHandlerMacro 0x23, 0; com2
+InterruptHandlerMacro 0x24, 0; com1
+InterruptHandlerMacro 0x25, 0; sb16
+InterruptHandlerMacro 0x26, 0; floppy
+InterruptHandlerMacro 0x27, 0; 并行口1
+InterruptHandlerMacro 0x28, 0; realtime clock
+InterruptHandlerMacro 0x29, 0; INTOAH
+InterruptHandlerMacro 0x2a, 0
+InterruptHandlerMacro 0x2b, 0; nic
+InterruptHandlerMacro 0x2c, 0
+InterruptHandlerMacro 0x2d, 0
+InterruptHandlerMacro 0x2e, 0; harddisk1
+InterruptHandlerMacro 0x2f, 0; harddisk2
+
 section .data
 global InterruptHandlerEntryTable
 InterruptHandlerEntryTable:
@@ -102,3 +120,20 @@ InterruptHandlerEntryTable:
     dd InterruptHandler_0x1d
     dd InterruptHandler_0x1e
     dd InterruptHandler_0x1f
+
+    dd InterruptHandler_0x20
+    dd InterruptHandler_0x21
+    dd InterruptHandler_0x22
+    dd InterruptHandler_0x23
+    dd InterruptHandler_0x24
+    dd InterruptHandler_0x25
+    dd InterruptHandler_0x26
+    dd InterruptHandler_0x27
+    dd InterruptHandler_0x28
+    dd InterruptHandler_0x29
+    dd InterruptHandler_0x2a
+    dd InterruptHandler_0x2b
+    dd InterruptHandler_0x2c
+    dd InterruptHandler_0x2d
+    dd InterruptHandler_0x2e
+    dd InterruptHandler_0x2f

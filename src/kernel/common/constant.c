@@ -33,6 +33,16 @@ const u32 PageSize = 0x1000; // 4KB
 const u32 PageSizeBits = 12;
 const u32 KernelPageCount = 0x400; // 4MB
 
+// Interrupt
+const u16 ClockCounter0 = 0x40;
+const u16 ClockCounter1 = 0x41;
+const u16 ClockCounter2 = 0x42;
+const u16 ControlWordRegister = 0x43;
+const u32 OsclilatorFrequency = 1193180;
+const u32 ClockFrequency = 100;
+const u32 ClockMaxTicks = OsclilatorFrequency / ClockFrequency;
+const u32 JeffyMS = 10;
+const float MSPerTick = 1.0 / OsclilatorFrequency;
 
 // Descriptor
 const u32 KernelCodeSegmentSelector = 1 << 3;

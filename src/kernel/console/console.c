@@ -102,7 +102,7 @@ Size ConsoleWriteWithColor(const char* buf, Size len, ConsoleColor color) {
     return len;
 }
 
-void InitConsole() {
+void InitializeConsole() {
     setScreenAddress(MonitorBaseAddress);
     setCursor(newCursor(0, 0));
     clearScreen();

@@ -1,5 +1,5 @@
 #include "mod.h"
 
-void InitMemoryManager() {
+void InitializeMemoryManager() {
     globalBuddyAllocatorInit();
 }

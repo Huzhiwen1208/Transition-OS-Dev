@@ -70,6 +70,16 @@ typedef enum MachineMode {
 // Interrupt
 #define INTERRUPT_COUNT 256
 #define EXCEPTION_COUNT 32
+#define OUTERAL_INTERRUPT_COUNT 16
+extern const u16 ClockCounter0; // Intel 8253/8254
+extern const u16 ClockCounter1;
+extern const u16 ClockCounter2;
+extern const u16 ControlWordRegister;
+extern const u32 OsclilatorFrequency;
+extern const u32 ClockFrequency;
+extern const u32 ClockMaxTicks;
+extern const u32 JeffyMS;
+extern const float MSPerTick;
 
 // Task PCB
 #define MAX_PROCESS_COUNT 1024

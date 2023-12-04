@@ -14,7 +14,7 @@ static void idle() {
 }
 
 
-void InitProcessManager() {
+void InitializeProcessManager() {
     processManager.Current = NULL;
     processManager.RunnableProcesses = NewQueue("PCB*", MAX_PROCESS_COUNT);
     CreateKernelProcess(idle);
@@ -59,7 +59,7 @@ void Schedule() {
     SwitchProcess(current, next);
 }
 
-void runFirstProcess() {
+static void runFirstProcess() {
     PCB* next = fetchProcess();
     next->Status = PROCESS_STATE_RUNNING;
 

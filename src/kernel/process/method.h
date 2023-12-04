@@ -1,5 +1,5 @@
 #pragma once
 
-void InitProcessManager();
+void InitializeProcessManager();
 void CreateKernelProcess(void* entry);
 void Schedule();
