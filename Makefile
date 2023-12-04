@@ -60,7 +60,7 @@ $(TARGET)/bootloader/%.bin: $(BootLoader)/%.asm
 # ------ bootloader
 
 # kernel made ----- 
-$(ELFKernel): $(KernelOBJ)
+$(ELFKernel): $(KernelOBJ) $(UserOBJ)
 	ld $(LdFlags) -Ttext $(ENTRYPOINT) $^ -o $@
 $(NakedKernel): $(ELFKernel)
 	objcopy -O binary $< $@
