@@ -34,4 +34,4 @@ PhysicalAddress GetAddressFromPPN(PhysicalPageNumber ppn);
 /// @param ardCount The count of address range descriptors
 void MemoryCheckout(PhysicalAddress* ardCountAddress);
 
-void InitMemoryManager();
+void InitializeMemoryManager();

@@ -1,4 +1,4 @@
-#include "lib.h"
+#include "mod.h"
 
 void MemoryCopy(void* dest, const void* src, Size size) {
     u8* dest8 = (u8*)dest;

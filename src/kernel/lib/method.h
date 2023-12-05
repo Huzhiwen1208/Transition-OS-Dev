@@ -1,6 +1,7 @@
 #pragma once
 
-#include "../common/common.h"
+#include "type.h"
+#include "../int/type.h"
 
 // log
 void DebugHandle(const char *file, i32 line, const char *fmt, ...);
@@ -59,3 +60,16 @@ void AssertFailed(char *exp, char *file, char *base, i32 line);
 
 #define Assert(exp) \
     if (!(exp)) AssertFailed(#exp, __FILE__, __BASE_FILE__, __LINE__)
+
+
+// SystemCall
+/// @brief 测试系统调用
+void Test();
+/// @brief 获得当前系统开启时钟至今的时间
+void GetTimeValue(TimeValue* tv);
+/// @brief 让出CPU
+void Yield();
+/// @brief 写控制台, 阴极射线管显示器
+Size Write(char* buf, Size len, ConsoleColor color);
+/// @brief 进程睡眠
+void Sleep(u32 ms);

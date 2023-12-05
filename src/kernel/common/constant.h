@@ -66,3 +66,35 @@ typedef enum MachineMode {
 
 // Data structure
 #define HASH_TABLE_SIZE 101
+
+// Interrupt
+#define INTERRUPT_COUNT 256
+#define EXCEPTION_COUNT 32
+#define OUTERAL_INTERRUPT_COUNT 16
+extern const u16 ClockCounter0; // Intel 8253/8254
+extern const u16 ClockCounter1;
+extern const u16 ClockCounter2;
+extern const u16 ControlWordRegister;
+extern const u32 OsclilatorFrequency;
+extern const u32 ClockFrequency;
+extern const u32 ClockMaxTicks;
+extern const u32 JeffyMS;
+extern const float MSPerTick;
+
+// Task PCB
+#define MAX_PROCESS_COUNT 1024
+extern const u32 UserStackTop;
+
+// Descriptor
+#define SEGMENT_COUNT 8192
+extern const u32 KernelCodeSegmentSelector;
+extern const u32 KernelDataSegmentSelector;
+extern const u32 UserCodeSegmentSelector;
+extern const u32 UserDataSegmentSelector;
+extern const u32 TSSSegmentSelector;
+
+// System call number
+#define SYSCALL_TEST 1
+#define SYSCALL_TIME 2
+#define SYSCALL_YIELD 3
+#define SYSCALL_WRITE 4

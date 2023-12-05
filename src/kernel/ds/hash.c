@@ -1,4 +1,4 @@
-#include "ds.h"
+#include "mod.h"
 
 static char* typeList[] = {"u32", "i32", "i8", "u8", "u16", "i16", "string", "char*", "char *"};
 
@@ -88,7 +88,7 @@ static u32 hash(char* keyType, void* key) {
     u32 k = -1;
     for (Size i = 0; i < sizeof(typeList) / sizeof(char*); i++) {
         if (i <= 5 && StringEqual(keyType, typeList[i])) {
-            k = *(u32*)key;
+            k = (u32)key;
             break;
         }
 

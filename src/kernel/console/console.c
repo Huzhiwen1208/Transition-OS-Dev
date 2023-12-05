@@ -1,5 +1,4 @@
-#include "console.h"
-#include "../lib/lib.h"
+#include "mod.h"
 
 static Cursor newCursor(u32 row, u32 col);
 /// @brief get screen current address
@@ -14,19 +13,13 @@ static PhysicalAddress getCursorAddress();
 static void setCursor(Cursor cursor);
 /// @brief clear screen
 static void clearScreen();
-
-void ConsoleAlignLine() {
-    Cursor cursor = getCursor();
-    if (cursor.Col != 0) {
-        ConsoleWrite("\n", 1);
-    }
-}
-
-Size ConsoleWrite(const char* buf, Size len) {
-    return ConsoleWriteWithColor(buf, len, WHITE);
-}
+/// @brief 如果当前行被写过，则换行
+static void ConsoleAlignLine();
 
 Size ConsoleWriteWithColor(const char* buf, Size len, ConsoleColor color) {
+    if (color != WHITE) {
+        ConsoleAlignLine();
+    }
     // 1. find cursor position in byte
     u16* currentPosition = (u16*)getCursorAddress();
     u32 row = getCursor().Row;
@@ -103,7 +96,7 @@ Size ConsoleWriteWithColor(const char* buf, Size len, ConsoleColor color) {
     return len;
 }
 
-void InitConsole() {
+void InitializeConsole() {
     setScreenAddress(MonitorBaseAddress);
     setCursor(newCursor(0, 0));
     clearScreen();
@@ -173,4 +166,11 @@ static void clearScreen() {
 static Cursor newCursor(u32 row, u32 col) {
     Cursor cursor = {row, col};
     return cursor;
+}
+
+static void ConsoleAlignLine() {
+    Cursor cursor = getCursor();
+    if (cursor.Col != 0) {
+        ConsoleWriteWithColor("\n", 1, WHITE);
+    }
 }

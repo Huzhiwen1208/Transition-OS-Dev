@@ -1,6 +1,4 @@
-#include "lib.h"
-#include "../common/common.h"
-#include "../console/console.h"
+#include "mod.h"
 
 #define ZEROPAD 0x01
 #define SIGN 0x02
@@ -351,7 +349,7 @@ Size Printf(const char *fmt, ...)
     va_start(args, fmt);
     Size i = Vsprintf(buf, fmt, args);
     va_end(args);
-    return ConsoleWrite(buf, i);
+    return Write(buf, i, WHITE);
 }
 
 Size Println(const char *fmt, ...)
@@ -361,9 +359,9 @@ Size Println(const char *fmt, ...)
     va_start(args, fmt);
     Size i = Vsprintf(buf, fmt, args);
     va_end(args);
-    ConsoleWrite(buf, i);
-    ConsoleWrite("\n", 1);
-    return i;
+    Write(buf, i, WHITE);
+    Write("\n", 1, WHITE);
+    return i+1;
 }
 
 Size PrintWithColor(ConsoleColor color, const char *fmt, ...)
@@ -373,7 +371,7 @@ Size PrintWithColor(ConsoleColor color, const char *fmt, ...)
     va_start(args, fmt);
     Size i = Vsprintf(buf, fmt, args);
     va_end(args);
-    return ConsoleWriteWithColor(buf, i, color);
+    return Write(buf, i, color);
 }
 
 void Panic(const char *fmt, ...)

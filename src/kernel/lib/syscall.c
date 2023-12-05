@@ -1,0 +1,39 @@
+#include "mod.h"
+
+static u32 SystemCall(u32 syscallNum, u32 arg1, u32 arg2, u32 arg3) {
+    asm volatile ("movl %0, %%eax" : : "m"(syscallNum));
+    asm volatile ("movl %0, %%ebx" : : "m"(arg1));
+    asm volatile ("movl %0, %%ecx" : : "m"(arg2));
+    asm volatile ("movl %0, %%edx" : : "m"(arg3));
+    asm volatile ("int $0x80");
+}
+
+void Test() {
+    SystemCall(SYSCALL_TEST, 1, 2, 3);
+}
+
+void GetTimeValue(TimeValue* tv) {
+    SystemCall(SYSCALL_TIME, (u32)tv, 0, 0);
+}
+
+void Yield() {
+    SystemCall(SYSCALL_YIELD, 0, 0, 0);
+}
+
+Size Write(char* buf, Size len, ConsoleColor color) {
+    SystemCall(SYSCALL_WRITE, (u32)buf, len, (u32)color);
+}
+
+void Sleep(u32 ms) {
+    TimeValue tv;
+    GetTimeValue(&tv);
+    u32 entryMS = tv.Second * 1000 + tv.MicroSecond / 1000;
+
+    while(TRUE) {
+        GetTimeValue(&tv);
+        u32 currentMS = tv.Second * 1000 + tv.MicroSecond / 1000;
+        if (currentMS >= ms + entryMS)
+            break;
+        Yield();
+    }
+}
