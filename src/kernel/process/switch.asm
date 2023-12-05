@@ -10,11 +10,11 @@ SwitchProcess:
     push edi
 
 
-    mov eax, [esp + 4*5]; currentKernelSP
-    mov [eax], esp;  save new sp to current currentKernelSP
+    mov eax, [esp + 4*5]; currentPCB
+    mov [eax], esp;  save new sp to currentPCB
 
-    mov eax, [esp + 4*6]; next nextKernelSP
-    mov esp, [eax];  switch esp to nextKernelSP
+    mov eax, [esp + 4*6]; next nextPCB
+    mov esp, [eax];  switch esp to nextPCB
 
     pop edi
     pop esi

@@ -1,17 +1,18 @@
 #include "mod.h"
 
+// global var
+
 static ProcessManager processManager;
 static PIDAllocator pidAllocator;
 static PCB* idleProcess;
 
+// static methods declaration
+
 static PCB* fetchProcess();
 static void runFirstProcess();
-static void idle() {
-    while (TRUE) {
-        Schedule();
-    }
-}
+static void idle();
 
+// public methods
 
 void InitializeProcessManager() {
     processManager.Current = NULL;
@@ -73,6 +74,8 @@ void Schedule() {
     SwitchProcess(current, next);
 }
 
+// static methods implement
+
 static void runFirstProcess() {
     PCB* next = fetchProcess();
     next->Status = PROCESS_STATE_RUNNING;
@@ -90,4 +93,10 @@ static void runFirstProcess() {
 static PCB* fetchProcess() {
     PCB* process = processManager.RunnableProcesses->Pop(processManager.RunnableProcesses);
     return process == NULL? idleProcess: process;
+}
+
+static void idle() {
+    while (TRUE) {
+        Schedule();
+    }
 }
