@@ -7,7 +7,7 @@ static HashTable* ExceptionMessage;
 
 // static methods
 
-static void initInterruptInfoMap();
+static void initExceptionInfoMap();
 static void defaultExceptionHandler(u32 vector);
 static void defaultOuteralInterruptHandler(u32 vector);
 static void initDefaultInterruptHandler();
@@ -20,7 +20,7 @@ void InitializeInterrupt() {
     initProgrammableInterruptController();
     InitializeGDT();
     InitializeIDT();
-    initInterruptInfoMap();
+    initExceptionInfoMap();
     initDefaultInterruptHandler();
 
     InitializeClock();
@@ -112,7 +112,7 @@ static void initProgrammableInterruptController() {
     WriteByte(0xA1, 0xff);
 }
 
-static void initInterruptInfoMap() {
+static void initExceptionInfoMap() {
     ExceptionMessage = NewMap("u32", "string");
     ExceptionMessage->Put(ExceptionMessage, 0,  "Divide Error");
     ExceptionMessage->Put(ExceptionMessage, 1,  "Debug");

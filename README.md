@@ -65,5 +65,16 @@ make debug # should use vscode launch.json with gdb
   
 在你的虚拟机（或者物理机，总之是你的运行代码的物理机不是远程开发机）上执行`make debug`，并在`main.c`中打上断点，调试到执行完最后一行代码，查看`globalBuddyAllocator`中的结点数，如果是两个，那么恭喜你实现了输出和内存管理初步。后续会使用键盘中断实现输入。当然，如果出现难以解决的问题，请联系我的邮箱`jackhu.521.rose@gmail.com`。我会把它贴在FAQ中。如果我遇到什么问题，也会分享到FAQ中。
 
+## 中断和特权级
+- 对应分支：feat/int
+- 内容概述：实现了中断处理、特权级切换以及进程管理初步。
+- 详情链接：[中断和特权级](https://m13n4gzucg.feishu.cn/docx/Oe5jdGu4moidgtxgDRpc3GIqnFf)
+
+在你的虚拟机（或者物理机，总之是你的运行代码的物理机不是远程开发机）上执行`make run`，你会看到类似下图界面，那么恭喜你实现了中断处理和特权级切换。后续会实现一些经典的系统调用。当然，如果出现难以解决的问题，请联系我的邮箱`jackhu.521.rose@gmail.com`。我会把它贴在FAQ中。如果我遇到什么问题，也会分享到FAQ中。
+
+<div align=center><img src="images/int.png" width="50%" height="50%"></div>
+
 ## FAQ
 1. 在操作系统中，数组下标越界是没有Warning和Error的，所以在开发中如果出现了下标越界，可能访问到其他我们并不想读/写的数据，所以需要严谨对待数组下标越界。
+2. 在Deepin系统中GDB无法进入汇编代码单步调试，经调研发现GDB版本比较旧，但是Deepin并不支持源码安装的GDB。所以使用了mac版的Makefile，只需要在macOS执行`make debug-mac`即可进行汇编单步调试。
+3. 如果不显示的加载TSS段，而只是简单的放在GDT中，会导致TSS invalid错误。
