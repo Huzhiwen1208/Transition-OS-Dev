@@ -24,6 +24,7 @@ void InitializeInterrupt() {
     initDefaultInterruptHandler();
 
     InitializeClock();
+    InitializePageFaultHandler();
 }
 
 void SetInterruptHandler(u32 vector, void* handler) {

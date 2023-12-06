@@ -20,6 +20,7 @@ typedef struct PCB {
     PID ID;
     ProcessState Status;
     ProcessType Type;
+    u32 RootPPN; 
     // u32 Stride;
     // u32 Pass;
     // u32 Priority;

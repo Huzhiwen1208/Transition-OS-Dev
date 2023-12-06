@@ -2,6 +2,7 @@
 
 #include "type.h"
 
+// 分页管理
 /// @brief allocate one page in specified mode
 /// @param mode: User / kernel
 /// @return physical address
@@ -17,6 +18,18 @@ PhysicalAddress AllocatePagesContinuously(MachineMode mode, u32 pageCount);
 /// @param address 
 void FreeOnePage(PhysicalAddress address);
 
+// 页表管理
+void SetRootPageTableAddr(PhysicalAddress addr);
+PhysicalAddress GetRootPageTableAddr();
+void InitializeMemoryMapping();
+PhysicalPageNumber GetPPNFromAddressFloor(PhysicalAddress address);
+PhysicalPageNumber GetPPNFromAddressCeil(PhysicalAddress address);
+PhysicalAddress GetAddressFromPPN(PhysicalPageNumber ppn);
+VirtualAddress GetCR2();
+void FlushTLB(VirtualAddress addr);
+void MapPage(VirtualAddress addr);
+
+// 堆分配管理
 /// @brief allocate memory size
 /// @param size: memory size
 /// @return physical address
@@ -26,10 +39,7 @@ PhysicalAddress Malloc(Size size);
 /// @param address 
 void Free(PhysicalAddress address);
 
-PhysicalPageNumber GetPPNFromAddressFloor(PhysicalAddress address);
-PhysicalPageNumber GetPPNFromAddressCeil(PhysicalAddress address);
-PhysicalAddress GetAddressFromPPN(PhysicalPageNumber ppn);
-
+// 初始化
 /// @brief Check out memory and construct memory manager
 /// @param ardCount The count of address range descriptors
 void MemoryCheckout(PhysicalAddress* ardCountAddress);
