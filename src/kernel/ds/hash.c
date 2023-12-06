@@ -110,7 +110,7 @@ static Boolean isKeyMatched(HashTable* map, u32 index, void* key) {
     if (!map->Initialized) Panic("Hash map not initialized.");
     for (Size i = 0; i < sizeof(typeList) / sizeof(char*); i++) {
         if (i <= 5 && StringEqual(map->KeyType, typeList[i])) {
-            return *(u32*)key == *(u32*)map->Table[index].key;
+            return (u32)key == (u32)map->Table[index].key;
         }
 
         if (i > 5 && StringEqual(map->KeyType, typeList[i])) {

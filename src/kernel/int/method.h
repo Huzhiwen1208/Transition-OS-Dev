@@ -12,3 +12,7 @@ void OuteralInterruptCompleted(u32 vector);
 void InitializeClock();
 void GetTime(TimeValue* tv);
 u32 GetTimeMS();
+
+// page fault
+
+void InitializePageFaultHandler();

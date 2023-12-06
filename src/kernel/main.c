@@ -20,6 +20,7 @@ void TransitionMain() {
     InitializeInterrupt();
     Printf("Welcome to Transition OS!\n");
     InitializeProcessManager();
+    InitializeMemoryMapping();
 
     CreateUserProcess(UserTest);
     CreateUserProcess(UserTestSchedule);

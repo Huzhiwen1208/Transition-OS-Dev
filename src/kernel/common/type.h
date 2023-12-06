@@ -17,6 +17,7 @@ typedef unsigned int PID;
 
 // memory manage
 typedef unsigned int PhysicalAddress;
+typedef unsigned int VirtualAddress;
 typedef unsigned int PhysicalPageNumber;
 
 // variable argument

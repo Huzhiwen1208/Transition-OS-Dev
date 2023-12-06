@@ -11,6 +11,7 @@ void CreateKernelProcess(void* entry) {
     process->Status = PROCESS_STATE_RUNNABLE;
     u32 stack = AllocateOnePage(KernelMode) + PageSize;
     process->Type = PROCESS_TYPE_KERNEL;
+    process->RootPPN = GetPPNFromAddressFloor(GetRootPageTableAddr());
 
     stack -= sizeof(SwitchContext);
     SwitchContext* context = (SwitchContext*)stack;
@@ -30,6 +31,14 @@ void CreateUserProcess(void* entry) {
     process->Status = PROCESS_STATE_RUNNABLE;
     u32 stack = AllocateOnePage(KernelMode) + PageSize;
     process->Type = PROCESS_TYPE_USER;
+    // 构造用户专属页表，复制内核页表的前4MB等页号映射
+    u32 userRootPPN = GetPPNFromAddressFloor(AllocateOnePage(KernelMode));
+    process->RootPPN = userRootPPN;
+    MemoryCopy(
+        GetAddressFromPPN(userRootPPN),
+        GetRootPageTableAddr(),
+        PageSize
+    );
 
     stack -= sizeof(InterruptContext);
     InterruptContext* trapContext = (InterruptContext*)stack;
@@ -51,7 +60,7 @@ void CreateUserProcess(void* entry) {
     trapContext->CS = UserCodeSegmentSelector;
     trapContext->PSW = 0x202; // 0000 0010 0000 0010
     trapContext->SS3 = UserDataSegmentSelector;
-    trapContext->ESP3 = AllocateOnePage(UserMode) + PageSize;
+    trapContext->ESP3 = UserStackTop;
 
     stack -= sizeof(SwitchContext);
     SwitchContext* context = (SwitchContext*)stack;
