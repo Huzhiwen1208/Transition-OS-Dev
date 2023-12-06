@@ -74,6 +74,11 @@ make debug # should use vscode launch.json with gdb
 
 <div align=center><img src="images/int.png" width="50%" height="50%"></div>
 
+## 内存映射-分页
+- 对应分支：feat/mm
+- 内容概述：实现了分页。
+- 详情链接：[内存映射-分页](https://m13n4gzucg.feishu.cn/docx/GSqddH3aqoSOfgxR5FQcTdknnUd)
+
 ## FAQ
 1. 在操作系统中，数组下标越界是没有Warning和Error的，所以在开发中如果出现了下标越界，可能访问到其他我们并不想读/写的数据，所以需要严谨对待数组下标越界。
 2. 在Deepin系统中GDB无法进入汇编代码单步调试，经调研发现GDB版本比较旧，但是Deepin并不支持源码安装的GDB。所以使用了mac版的Makefile，只需要在macOS执行`make debug-mac`即可进行汇编单步调试。
