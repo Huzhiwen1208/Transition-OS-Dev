@@ -37,3 +37,7 @@ void Sleep(u32 ms) {
         Yield();
     }
 }
+
+Size Readline(char* buf, Size len) {
+    return SystemCall(SYSCALL_READ, (u32)buf, len, 0);
+}

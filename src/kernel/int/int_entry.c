@@ -25,6 +25,7 @@ void InitializeInterrupt() {
 
     InitializeClock();
     InitializePageFaultHandler();
+    InitializeKeyboard();
 }
 
 void SetInterruptHandler(u32 vector, void* handler) {
@@ -48,6 +49,21 @@ void OuteralInterruptCompleted(u32 vector) {
         WriteByte(0xA0, 0x20); // 从片
     }
     WriteByte(0x20, 0x20);
+}
+
+u8 GetInterruptStatus() {
+    asm volatile ("pushf");
+    asm volatile ("pop %eax");
+    asm volatile ("and $0x200, %eax");
+    asm volatile ("shr $9, %eax");
+}
+
+void RestoreInterruptStatus(u8 status) {
+    if (status) {
+        asm volatile ("sti");
+    } else {
+        asm volatile ("cli");
+    }
 }
 
 // 我还没想关哪个中断 /doge

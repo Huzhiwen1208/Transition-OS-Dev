@@ -2,10 +2,10 @@
 
 #include "type.h"
 
-extern const u32 EOF;
-extern const u32 NULL;
-extern const u8 TRUE;
-extern const u8 FALSE;
+#define EOF -1
+#define NULL 0
+#define TRUE 1
+#define FALSE 0
 
 /// @brief console
 typedef enum ConsoleColor {
@@ -80,6 +80,7 @@ extern const u32 ClockFrequency;
 extern const u32 ClockMaxTicks;
 extern const u32 JeffyMS;
 extern const float MSPerTick;
+extern const u32 KeyboardDataPort; //键盘中断数据端口
 
 // Task PCB
 #define MAX_PROCESS_COUNT 1024
@@ -98,3 +99,4 @@ extern const u32 TSSSegmentSelector;
 #define SYSCALL_TIME 2
 #define SYSCALL_YIELD 3
 #define SYSCALL_WRITE 4
+#define SYSCALL_READ 5

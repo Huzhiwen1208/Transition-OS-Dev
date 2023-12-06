@@ -6,13 +6,6 @@
 #include "process/mod.h"
 
 extern void UserTest();
-extern void UserTestSchedule();
-void KernelTest() {
-    while (TRUE) {
-        Printf("Kernel\n");
-        Sleep(100);
-    }
-}
 
 void TransitionMain() {
     InitializeConsole();
@@ -20,9 +13,6 @@ void TransitionMain() {
     InitializeInterrupt();
     Printf("Welcome to Transition OS!\n");
     InitializeProcessManager();
-    InitializeMemoryMapping();
 
     CreateUserProcess(UserTest);
-    CreateUserProcess(UserTestSchedule);
-    CreateKernelProcess(KernelTest);
 }

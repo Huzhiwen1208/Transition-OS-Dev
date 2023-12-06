@@ -1,10 +1,5 @@
 #include "type.h"
 
-const u32 EOF = -1;
-const u32 NULL = 0;
-const u8 TRUE = 1;
-const u8 FALSE = 0;
-
 // CathodeRayTube Monitor (CRT)
 const u16 MonitorAddressRegister = 0x3D4;
 const u16 MonitorDataRegister = 0x3D5;
@@ -46,6 +41,7 @@ const u32 ClockFrequency = 100;
 const u32 ClockMaxTicks = OsclilatorFrequency / ClockFrequency;
 const u32 JeffyMS = 10;
 const float MSPerTick = 1.0 / OsclilatorFrequency;
+const u32 KeyboardDataPort = 0x60;
 
 // Descriptor
 const u32 KernelCodeSegmentSelector = 1 << 3;

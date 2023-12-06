@@ -2,4 +2,5 @@
 
 void InitializeMemoryManager() {
     globalBuddyAllocatorInit();
+    InitializeMemoryMapping();
 }

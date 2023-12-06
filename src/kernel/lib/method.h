@@ -73,3 +73,5 @@ void Yield();
 Size Write(char* buf, Size len, ConsoleColor color);
 /// @brief 进程睡眠
 void Sleep(u32 ms);
+/// @brief 从键盘读取一行
+Size Readline(char* buf, Size len);
