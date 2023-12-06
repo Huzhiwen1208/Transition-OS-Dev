@@ -47,7 +47,7 @@ make debug # should use vscode launch.json with gdb
     /// @brief 对外暴露的方法，功能
     ```
 5. 整体的开发过程，会尽量解耦，并且采用需要什么添加什么的逻辑，所以前期可扩展性要好（虽然不是商业化工程开发）
-6. 每个内容块都会单独开个分支，每个分支对应了一个README.md中的二级标题。其中所有的资源采用垂直记录。分支只能采用PR形式提交到master，并做好合并说明。我们保留每一个分支，所以在Merge时，需要Squash Commits。这样可以在master上看到有多少个模块合入，在每个具体分支上可以看Commit信息。
+6. 每个内容块都会单独开个分支，每个分支对应了一个README.md中的二级标题。其中所有的资源采用垂直记录。分支只能采用PR形式提交到master，并做好合并说明。我们保留每一个分支，所以在Merge时，需要Squash Commits（有可能并没有Squash，hhh）。这样可以在master上看到有多少个模块合入，在每个具体分支上可以看Commit信息。
    - feat/xxx: 一个新的xxx功能分支开发
    - fix/xxx: 修复xxx功能或模块
 
