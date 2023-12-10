@@ -5,6 +5,7 @@ extern void RestoreContext();
 /// @brief 让栈指针指向Interrupt Context方便返回用户态
 static void restore();
 static void copyPageTableRecursion(u32 dstRootPPN, u32 srcRootPPN);
+static void freePageTableRecursion(u32 rootPPN);
 
 
 // public methods
@@ -120,6 +121,54 @@ PID ForkProcess() {
     return child->ID;
 }
 
+/*
+    1. 释放进程的PID
+    2. 释放进程的所有页表
+    3. 释放进程的栈
+    4. 将所有的子进程挂到当前进程的父进程下
+*/
+void ExitProcess(i32 exitCode) {
+    PCB* current = GetCurrentProcess();
+    current->Status = PROCESS_STATE_ZOMBIE;
+    current->ExitCode = exitCode;
+    FreePID(current->ID);
+    freePageTableRecursion(current->RootPPN);
+    FreeOnePage(GetAddressFromPPN(GetPPNFromAddressFloor(current->KernelStackPointer)));
+
+    // 将所有的子进程挂到当前进程的父进程下
+    RedirectParentOfChildren();
+
+    Schedule();
+}
+
+PID WaitProcess(PID pid, i32* exitCode) {
+    PCB* current = GetCurrentProcess();
+    /*
+        1. 如果遍历完所有Runnable进程和Zombie进程都没有找到，说明进程不存在，返回-1
+        2. 如果在Runnable进程中找到，说明进程还没退出，返回-2即可，让上游来决定如何处理
+        3. 如果在Zombie进程中找到，说明进程已经退出，返回退出码并回收进程的PCB
+    */
+    PCB* activatedChild = FindActivatedChildProcessByPID(pid);
+    PCB* zombieChild = TakeZombieProcess(pid);
+
+    if (activatedChild == NULL && zombieChild == NULL) {
+        return -1;
+    }
+
+    if (zombieChild == NULL) {
+        return -2;
+    }
+
+    // 存在僵尸子进程
+    if (exitCode != NULL) {
+        *exitCode = zombieChild->ExitCode;
+    }
+
+    PID rid = zombieChild->ID;
+    Free(zombieChild);
+    return rid;
+}
+
 PID GetProcessID() {
     return GetCurrentProcess()->ID;
 }
@@ -183,5 +232,25 @@ static void copyPageTableRecursion(u32 dstRootPPN, u32 srcRootPPN) {
             );
         }
     }
+    EnablePaging();
+}
+
+static void freePageTableRecursion(u32 rootPPN) {
+    DisablePaging();
+    PageTableEntry* rootPTE = (PageTableEntry*)GetAddressFromPPN(rootPPN);
+    for (Size i = 1; i < 1024; i++) {
+        if (rootPTE[i].Present == 0) continue; // 不存在的页表项不释放
+
+        u32 secondPPN = rootPTE[i].NextPPN;
+        PageTableEntry* secondPTE = (PageTableEntry*)GetAddressFromPPN(secondPPN);
+        for (Size j = 0; j < 1024; j++) {
+            if (secondPTE[j].Present == 0) continue; // 不存在的页帧不释放
+
+            u32 thirdPPN = secondPTE[j].NextPPN;
+            FreeOnePage(GetAddressFromPPN(thirdPPN));
+        }
+        FreeOnePage(GetAddressFromPPN(secondPPN));
+    }
+    FreeOnePage(GetAddressFromPPN(rootPPN));
     EnablePaging();
 }

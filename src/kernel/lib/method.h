@@ -77,5 +77,7 @@ void Sleep(u32 ms);
 Size Readline(char* buf, Size len);
 /// @brief fork 子进程
 PID Fork();
+void Exit(i32 exitCode);
 PID GetPID();
 PID GetPPID();
+PID WaitPid(PID pid, i32* exitCode);

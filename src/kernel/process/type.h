@@ -23,6 +23,7 @@ typedef struct PCB {
     ProcessState Status;
     ProcessType Type;
     u32 RootPPN; 
+    i32 ExitCode;
     // u32 Stride;
     // u32 Pass;
     // u32 Priority;
@@ -64,6 +65,7 @@ typedef struct InterruptContext {
 typedef struct ProcessManager {
     PCB* Current;
     Queue* RunnableProcesses;
+    Queue* ZombieProcesses;
 } ProcessManager;
 
 // PID allocator
