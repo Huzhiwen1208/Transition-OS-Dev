@@ -17,6 +17,7 @@ static void idle();
 void InitializeProcessManager() {
     processManager.Current = NULL;
     processManager.RunnableProcesses = NewQueue("PCB*", MAX_PROCESS_COUNT);
+    processManager.ZombieProcesses = NewQueue("PCB*", MAX_PROCESS_COUNT);
     CreateKernelProcess(idle);
     idleProcess = fetchProcess();
 }
@@ -56,11 +57,34 @@ void Schedule() {
         return;
     }
     
-    // 如果就绪队列里有进程，并且当前进程存在，说明可以执行切换
     PCB* current = processManager.Current;
-    if (current->ID && current->Status != PROCESS_STATE_BLOCKED) {
-        current->Status = PROCESS_STATE_RUNNABLE;
-        AddProcess(current);
+    /*
+        1. 当前进程是IDLE，切换时不需要进等待队列
+        2. 当前进程是ZOMBIE，需要挂到ZOMBIE队列
+        3. 当前进程是BLOCKED，需要挂到阻塞队列
+        4. 当前进程是RUNNABLE，不可能
+        5. 当前进程是RUNNING，需要挂到等待队列
+    */
+    if (current->ID == 0) {
+        // IDLE进程，什么也不做
+        Debug("IDLE process scheduled");
+    } else {
+        switch (current->Status) {
+            case PROCESS_STATE_ZOMBIE:
+                processManager.ZombieProcesses->Push(processManager.ZombieProcesses, current);
+                break;
+            case PROCESS_STATE_BLOCKED:
+                // 阻塞队列
+                break;
+            case PROCESS_STATE_RUNNABLE:
+                Panic("Process is runnable???");
+            case PROCESS_STATE_RUNNING:
+                current->Status = PROCESS_STATE_RUNNABLE;
+                AddProcess(current);
+                break;
+            default:
+                Panic("Unknown process state: %d", current->Status);
+        }
     }
 
     PCB* next = fetchProcess();
@@ -77,6 +101,54 @@ void Schedule() {
 
     processManager.Current = next;
     SwitchProcess(current, next);
+}
+
+// 将当前进程的所有子进程的父进程设置为当前进程的父进程（包括Ready、Zombie、Block）
+void RedirectParentOfChildren() {
+    PCB* current = processManager.Current;
+    Queue* queue = processManager.RunnableProcesses;
+    for (i32 i = queue->Front; i < queue->Rear; i = (i + 1) % queue->MallocSize) {
+        PCB* process = (PCB*)queue->Value[i];
+        if (process && process->ParentID == current->ID) {
+            process->ParentID = current->ParentID;
+        }
+    }
+
+    queue = processManager.ZombieProcesses;
+    for (i32 i = queue->Front; i < queue->Rear; i = (i + 1) % queue->MallocSize) {
+        PCB* process = (PCB*)queue->Value[i];
+        if (process && process->ParentID == current->ID) {
+            process->ParentID = current->ParentID;
+        }
+    }
+}
+
+PCB* FindActivatedChildProcessByPID(PID pid) {
+    PCB* current = processManager.Current;
+    Queue* queue = processManager.RunnableProcesses;
+    for (i32 i = queue->Front; i < queue->Rear; i = (i + 1) % queue->MallocSize) {
+        PCB* process = (PCB*)queue->Value[i];
+        if (process && process->ParentID == current->ID && (process->ID == pid || pid == -1)) {
+            return process;
+        }
+    }
+    return NULL;
+}
+
+PCB* TakeZombieProcess(PID pid) {
+    PCB* current = processManager.Current;
+    Queue* queue = processManager.ZombieProcesses;
+    for (i32 i = queue->Front; i < queue->Rear; i = (i + 1) % queue->MallocSize) {
+        PCB* process = (PCB*)queue->Value[i];
+        if (process && process->ParentID == current->ID && (process->ID == pid || pid == -1)) {
+            void* value = queue->Value[i];
+            queue->Value[i] = queue->Value[queue->Front];
+            queue->Value[queue->Front] = value;
+            return (PCB*)(queue->Pop(queue));
+        }
+    }
+
+    return NULL;
 }
 
 // static methods implement

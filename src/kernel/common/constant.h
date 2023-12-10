@@ -100,3 +100,8 @@ extern const u32 TSSSegmentSelector;
 #define SYSCALL_YIELD 3
 #define SYSCALL_WRITE 4
 #define SYSCALL_READ 5
+#define SYSCALL_FORK 6
+#define SYSCALL_GETPID 7
+#define SYSCALL_GETPPID 8
+#define SYSCALL_EXIT 9
+#define SYSCALL_WAIT_PID 10

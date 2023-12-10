@@ -81,6 +81,15 @@ make debug # should use vscode launch.json with gdb
 - 内容概述：实现了分页。
 - 详情链接：[内存映射-分页](https://m13n4gzucg.feishu.cn/docx/GSqddH3aqoSOfgxR5FQcTdknnUd)
 
+## 创建子进程
+- 对应分支：feat/fork-related
+- 内容概述：我们实现了系统调用`fork`, `exit`, `wait`。这可以很容易的实现子进程创建，但是我们没有实现copy-on-write，后续有兴趣可以补充下。
+- 详情链接：[创建子进程](https://m13n4gzucg.feishu.cn/docx/HSeBdi8xCojafRxFmKScgnPXneg)
+
+在你的虚拟机（或者物理机，总之是你的运行代码的物理机不是远程开发机）上执行`make run`，你会看到类似下图界面，那么恭喜你实现了子进程的创建并了解了进程树的概念。这为后续实现多任务的加载和执行提供了便利。当然，如果出现难以解决的问题，请联系我的邮箱`jackhu.521.rose@gmail.com`。我会把它贴在FAQ中。本章节我遇到的一个问题是：<font color=red>在fork-复制页表步骤中，我们是不可以复制内核页表的，因为这会导致我们的内核页表等值映射失效，从而在设置完CR3寄存器后会出现错误，这个需要自行体会下</font>
+
+<div align=center><img src="images/fork.png" width="50%" height="50%"></div>
+
 ## FAQ
 0. Mac和Ubuntu中的bximage命令中，需要使用-func代替-mode来创建硬盘，而Deepin只需要使用-mode选项。
 1. 在本操作系统开发中，我们关闭了所有的warning（据说linux开发把所有的warning看成error）。并且数组下标越界是没有Warning和Error的，所以在开发中如果出现了下标越界，可能访问到其他我们并不想读/写的数据，所以需要严谨对待数组下标越界。

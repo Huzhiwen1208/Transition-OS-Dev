@@ -28,6 +28,8 @@ PhysicalAddress GetAddressFromPPN(PhysicalPageNumber ppn);
 VirtualAddress GetCR2();
 void FlushTLB(VirtualAddress addr);
 void MapPage(VirtualAddress addr);
+void EnablePaging();
+void DisablePaging();
 
 // 堆分配管理
 /// @brief allocate memory size

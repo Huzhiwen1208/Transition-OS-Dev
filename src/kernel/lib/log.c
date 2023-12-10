@@ -29,7 +29,7 @@ void WarnHandle(const char *file, i32 line, const char *fmt, ...) {
     va_list args;
     va_start(args, fmt);
     Vsprintf(buf, fmt, args);
-    PrintWithColor(YELLOW, "[WARN] %s:%d %s\n", file, line, buf);
+    PrintWithColor(LIGHT_YELLOW, "[WARN] %s:%d %s\n", file, line, buf);
 }
 
 void ErrorHandle(const char *file, i32 line, const char *fmt, ...) {
