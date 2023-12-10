@@ -75,3 +75,7 @@ Size Write(char* buf, Size len, ConsoleColor color);
 void Sleep(u32 ms);
 /// @brief 从键盘读取一行
 Size Readline(char* buf, Size len);
+/// @brief fork 子进程
+PID Fork();
+PID GetPID();
+PID GetPPID();

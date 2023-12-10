@@ -2,11 +2,18 @@
 
 void UserTest() {
     Info("Hello! User test process!");
-    Sleep(100);
-    char buf[100];
-    Size size = Readline(buf, 100);
-    Assert(size == StringLength(buf));
 
-    Info("You input: %s", buf);
+    PID pid = Fork();
+    if (pid) {
+        // 父进程
+        PID pid = GetPID();
+        PID ppid = GetPPID();
+        Info("Hello! I'm parent process! pid, ppid: {%d, %d}", pid, ppid);
+    } else {
+        // 子进程
+        PID pid = GetPID();
+        PID ppid = GetPPID();
+        Info("Hello! I'm child process! pid, ppid: {%d, %d}", pid, ppid);
+    }
     Suspend();
 }

@@ -20,6 +20,18 @@ static u32 syscallRead(char* buf, Size len) {
     return ReadLine(buf, len);
 }
 
+static PID syscallFork() {
+    return ForkProcess();
+}
+
+static PID syscallGetPid() {
+    return GetProcessID();
+}
+
+static PID syscallGetPPid() {
+    return GetProcessParentID();
+}
+
 u32 TrapHandler(u32 syscallNum, u32 arg1, u32 arg2, u32 arg3) {
     switch (syscallNum) {
         case SYSCALL_TEST:
@@ -35,6 +47,12 @@ u32 TrapHandler(u32 syscallNum, u32 arg1, u32 arg2, u32 arg3) {
             return syscallWrite((char*)arg1, arg2, (ConsoleColor)arg3);
         case SYSCALL_READ:
             return syscallRead((char*)arg1, arg2);
+        case SYSCALL_FORK:
+            return syscallFork();
+        case SYSCALL_GETPID:
+            return syscallGetPid();
+        case SYSCALL_GETPPID:
+            return syscallGetPPid();
         default:
             Panic("Unknown syscall number: %d", syscallNum);
     }
