@@ -4,6 +4,7 @@
 
 void InitializeProcessManager();
 PCB* GetCurrentProcess();
+void AddProcess(PCB* process);
 PID AllocatePID();
 void FreePID(PID pid);
 PCB* FindActivatedChildProcessByPID(PID pid);

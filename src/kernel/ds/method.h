@@ -10,3 +10,5 @@ void DeleteQueue(Queue** self);
 
 PriorityQueue* NewPriorityQueue(char* type, i32 size);
 void DeletePriorityQueue(PriorityQueue** self);
+
+ReentrantLock* NewReentrantLock();

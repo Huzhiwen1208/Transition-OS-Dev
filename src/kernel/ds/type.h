@@ -44,3 +44,15 @@ typedef struct PriorityQueue {
     void (*Push)(struct PriorityQueue* self, void* value);
     void* (*Pop)(struct PriorityQueue* self);
 } PriorityQueue;
+
+// reentrant lock
+typedef struct ReentrantLock {
+    Boolean Locked;
+    Boolean Initialized;
+    u32 EntrantCount;
+    void* Owner; // 锁的当前占用者
+    Queue* WaitQueue;
+    
+    void (*Lock)(struct ReentrantLock* self);
+    void (*Unlock)(struct ReentrantLock* self);
+} ReentrantLock;
