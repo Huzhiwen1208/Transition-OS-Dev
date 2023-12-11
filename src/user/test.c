@@ -2,7 +2,6 @@
 
 void UserTest() {
     Info("Hello! User test process!");
-
     PID pid = Fork();
     if (pid) {
         // 父进程
