@@ -16,5 +16,10 @@ void TransitionMain() {
     InitializeProcessManager();
     InitializeDevice();
     
-    CreateUserProcess(UserTest);
+    char buffer[512];
+    DeviceRead(0, 0, 1, buffer);
+    Info("Read from disk: %s\n", buffer);
+
+    DeviceWrite(1, 0, 1, buffer);
+    // CreateUserProcess(UserTest);
 }

@@ -91,7 +91,7 @@ endif
 
 debug: build 
 	qemu-system-i386 -m 32M \
-		-drive file=img/transition.img,if=ide,index=0,media=disk,format=raw \ 
+		-drive file=img/transition.img,if=ide,index=0,media=disk,format=raw \
 		-drive file=img/fs.img,if=ide,index=1,media=disk,format=raw \
 		-s -S
 		

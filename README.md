@@ -90,6 +90,16 @@ make debug # should use vscode launch.json with gdb
 
 <div align=center><img src="images/fork.png" width="50%" height="50%"></div>
 
+## 磁盘安装和读写
+- 对应分支：feat/device-disk
+- 内容概述：我们创建了IDE的两个磁盘（主从各一个），从盘会在后面用来加载文件系统。我们还创建了设备表，但是我们没有把显示屏和键盘安装成设备（可以很容易地安装下）。
+- 详情链接：[设备安装-IDE磁盘](https://m13n4gzucg.feishu.cn/docx/CNqRd32zDoGVaTxjAkvcR19Unoh)
+
+在你的虚拟机（或者物理机，总之是你的运行代码的物理机不是远程开发机）上执行`make debug`，并把断点打在`main.c:21`，并看到如下图1；再执行`make run`，看到如下图2。那么恭喜你完成了磁盘设备的安装和读写。这为后续文件系统的实现打下了基础。当然，如果出现难以解决的问题，请联系我的邮箱`jackhu.521.rose@gmail.com`。我会把它贴在FAQ中。
+
+<div align=center><img src="images/disk_read.jpg" width="50%" height="50%"></div>
+<div align=center><img src="images/disk_write.jpg" width="50%" height="50%"></div>
+
 ## FAQ
 0. Mac和Ubuntu中的bximage命令中，需要使用-func代替-mode来创建硬盘，而Deepin只需要使用-mode选项。
 1. 在本操作系统开发中，我们关闭了所有的warning（据说linux开发把所有的warning看成error）。并且数组下标越界是没有Warning和Error的，所以在开发中如果出现了下标越界，可能访问到其他我们并不想读/写的数据，所以需要严谨对待数组下标越界。
