@@ -42,6 +42,7 @@ PhysicalAddress Malloc(Size size) {
     }
 
     getBuddyBlock(p)->IsUsed = TRUE;
+    MemoryFree(getBuddyBlock(p)->BaseAddress, getBuddyBlock(p)->BlockSize);
     return getBuddyBlock(p)->BaseAddress;
 }
 

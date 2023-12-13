@@ -28,6 +28,10 @@ static void ReentrantLock_Lock(ReentrantLock* self) {
     }
 
     PCB* current = GetCurrentProcess();
+    if (current == NULL) { // 如果当前没有进程，直接返回
+        return;
+    }
+
     if (self->Owner == current) {
         self->EntrantCount++;
         return;
@@ -50,6 +54,10 @@ static void ReentrantLock_Unlock(ReentrantLock* self) {
     }
 
     PCB* current = GetCurrentProcess();
+    if (current == NULL) { // 如果当前没有进程，直接返回
+        return;
+    }
+    
     Assert((PCB*)self->Owner == current);
 
     self->EntrantCount--;

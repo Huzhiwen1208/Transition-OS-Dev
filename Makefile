@@ -1,6 +1,7 @@
 AsmCompile=nasm
 CCompile=gcc
 IMG=img/transition.img
+FSImage=img/fs.img
 
 GccFlags=-m32 -fno-builtin -fno-stack-protector -march=pentium
 GccFlags+=-w -nostdinc -nostdlib -fno-pic -fno-pie -g
@@ -24,7 +25,8 @@ ENTRYPOINT=0x7e00
 
 run: build
 	qemu-system-i386 -m 32M \
-		-drive file=img/transition.img,if=ide,index=0,media=disk,format=raw
+		-drive file=img/transition.img,if=ide,index=0,media=disk,format=raw \
+		-drive file=img/fs.img,if=ide,index=1,media=disk,format=raw
 
 build: $(TARGET) $(IMG)
 
@@ -43,6 +45,8 @@ ifeq ($(wildcard $(TARGET)),)
 	@mkdir -p $(TARGET)/kernel/process
 	@mkdir -p $(TARGET)/kernel/syscall
 	@mkdir -p $(TARGET)/user
+	@mkdir -p $(TARGET)/kernel/device
+	@mkdir -p $(TARGET)/kernel/disk
 endif
 
 # .c, .asm ---> .o ------
@@ -78,13 +82,19 @@ ifeq ($(wildcard img),)
 	@mkdir img
 endif
 ifeq ($(wildcard $(IMG)),)
-	bximage -q -hd=128 -mode=create -sectsize=512 -imgmode=flat $(IMG)
+	bximage -q -hd=16 -mode=create -sectsize=512 -imgmode=flat $(IMG)
+endif
+ifeq ($(wildcard $(FSImage)),)
+	bximage -q -hd=64 -mode=create -sectsize=512 -imgmode=flat $(FSImage)
 endif
 # ------- img made
 
 debug: build 
 	qemu-system-i386 -m 32M \
-		-drive file=img/transition.img,if=ide,index=0,media=disk,format=raw -s -S
+		-drive file=img/transition.img,if=ide,index=0,media=disk,format=raw \
+		-drive file=img/fs.img,if=ide,index=1,media=disk,format=raw \
+		-s -S
+		
 
 run-mac:
 	@make -f Makefile.mac run
