@@ -24,7 +24,7 @@ const i32 CR = 0x0D; // \r
 const i32 Space = 0x20;
 
 const u32 ManagableMemorySize = 0x2000000; // 32MB
-const u32 PageSize = 0x1000; // 4KB
+const u32 PageSize = 0x1000;               // 4KB
 const u32 PageSizeBits = 12;
 const u32 KernelPageCount = 0x400; // 4MB
 
@@ -49,3 +49,44 @@ const u32 KernelDataSegmentSelector = 2 << 3;
 const u32 TSSSegmentSelector = 3 << 3;
 const u32 UserCodeSegmentSelector = 4 << 3 | 3;
 const u32 UserDataSegmentSelector = 5 << 3 | 3;
+
+// Disk
+const u16 IdeIobaseMaster = 0x1F0;
+const u16 IdeIobaseSlave = 0x170;
+const u32 IdeLbaMaster = 0xe0;
+const u32 IdeLbaSlave = 0xf0;
+const u32 IdeTimeout = 100000;
+
+const u16 IdeDataRegister = 0;
+const u16 IdeErrorRegister = 1;
+const u16 IdeFeatureRegister = 1;
+const u16 IdeSectorCountRegister = 2;
+const u16 IdeSectorLocationRegister = 3;
+const u16 IdeCylinderLowRegister = 4;
+const u16 IdeCylinderHighRegister = 5;
+const u16 IdeLbaLow = 3;
+const u16 IdeLbaMid = 4;
+const u16 IdeLbaHigh = 5;
+const u16 IdeSelectorRegister = 6;
+const u16 IdeStatusRegister = 7;
+const u16 IdeCommandRegister = 7;
+const u16 IdeAlternateStatusRegister = 0x206;
+const u16 IdeControlRegister = 0x206;
+const u16 IdeDriverAddressRegister = 0x206;
+
+// Ide 状态寄存器
+const u16 IdeStatusNull = 0;
+const u16 IdeStatusErr = 1;
+const u16 IdeStatusIdx = 2;
+const u16 IdeStatusCorr = 4;
+const u16 IdeStatusDrq = 8;
+const u16 IdeStatusDsc = 16;
+const u16 IdeStatusDwf = 32;
+const u16 IdeStatusDrdy = 64;
+const u16 IdeStatusBusy = 128;
+
+// Ide 命令
+const u8 IdeCommandRead = 0x20;
+const u8 IdeCommandWrite = 0x30;
+const u8 IdeCommandIdentify = 0xEC;
+const u8 IdeCommandDiagnostic = 0x90;

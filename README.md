@@ -93,5 +93,5 @@ make debug # should use vscode launch.json with gdb
 ## FAQ
 0. Mac和Ubuntu中的bximage命令中，需要使用-func代替-mode来创建硬盘，而Deepin只需要使用-mode选项。
 1. 在本操作系统开发中，我们关闭了所有的warning（据说linux开发把所有的warning看成error）。并且数组下标越界是没有Warning和Error的，所以在开发中如果出现了下标越界，可能访问到其他我们并不想读/写的数据，所以需要严谨对待数组下标越界。
-2. 在Deepin系统中GDB无法进入汇编代码单步调试，经调研发现GDB版本比较旧，但是Deepin并不支持源码安装的高版本GDB。所以使用了mac版的Makefile，只需要在macOS执行`make debug-mac`即可在Mac上进行汇编单步调试。
+2. 在Deepin系统中GDB无法进入汇编代码单步调试，经调研发现GDB版本比较旧，但是Deepin并不支持源码安装的高版本GDB。所以使用了mac版的Makefile，只需要在macOS执行`make debug-mac`即可在Mac上进行汇编单步调试。不知道为什么在做`fork`那一节的时候gdb可用了，所以就不维护Mac的Makefile了。
 3. 如果不显式的加载TSS段，而只是简单的放在GDT中，CPU会找不到TSS位置，从而在用户态系统调用时会导致TSS invalid之类的错误。

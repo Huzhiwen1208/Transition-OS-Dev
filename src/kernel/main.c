@@ -4,6 +4,7 @@
 #include "memory/mod.h"
 #include "int/mod.h"
 #include "process/mod.h"
+#include "device/mod.h"
 
 extern void UserTest();
 
@@ -13,6 +14,7 @@ void TransitionMain() {
     InitializeInterrupt();
     Printf("Welcome to Transition OS!\n");
     InitializeProcessManager();
-
+    InitializeDevice();
+    
     CreateUserProcess(UserTest);
 }
