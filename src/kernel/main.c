@@ -18,8 +18,11 @@ void TransitionMain() {
     
     char buffer[512];
     DeviceRead(0, 0, 1, buffer);
-    Info("Read from disk: %s\n", buffer);
-
     DeviceWrite(1, 0, 1, buffer);
+
+    char buffer2[512];
+    DiskCacheRead(0, buffer2);
+    MemoryFree(buffer2, 512);
+    DiskCacheWrite(0, buffer2);
     // CreateUserProcess(UserTest);
 }

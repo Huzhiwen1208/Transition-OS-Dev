@@ -67,7 +67,7 @@ typedef enum MachineMode
 } MachineMode;
 
 // Data structure
-#define HASH_TABLE_SIZE 101
+#define HASH_TABLE_SIZE 129
 
 // Interrupt
 #define INTERRUPT_COUNT 256
@@ -155,3 +155,7 @@ extern const u8 IdeCommandRead;       // 读命令
 extern const u8 IdeCommandWrite;      // 写命令
 extern const u8 IdeCommandIdentify;   // 识别命令
 extern const u8 IdeCommandDiagnostic; // 诊断命令
+
+// 文件系统
+extern const u32 BlockCacheStart; // 磁盘块缓存起始地址
+extern const u32 BlockCacheEnd;   // 磁盘块缓存结束地址

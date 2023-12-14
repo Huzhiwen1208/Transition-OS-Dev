@@ -12,6 +12,7 @@ void InitializeDevice() {
         devices[i] = NULL;
     }
     InitializeIdeDisk();
+    InitializeDiskCache();
 }
 
 u32 InstallDevice(Device* device) {

@@ -4,7 +4,7 @@ static void PageFaultHandler(u32 vector) {
     Assert(vector == 0xe);
 
     VirtualAddress addr = GetCR2();
-    // Warn("Page fault at 0x%x\n", addr);
+    Assert(addr >= 0x400000); // 确保不是内核地址缺页，因为内核地址都被恒等映射了
     MapPage(addr);
 }
 

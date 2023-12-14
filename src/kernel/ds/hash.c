@@ -13,56 +13,11 @@ static u32 hash(char* keyType, void* key);
 /// @param index 
 /// @return 可插入？
 static Boolean available(HashTable* map, u32 index);
-
 static Boolean isKeyMatched(HashTable* map, u32 index, void* key);
+static void* Get(HashTable* self, void* key);
+static void Put(HashTable* self, void* key, void* value);
+static void Delete(HashTable* self, void* key);
 
-static void* Get(HashTable* self, void* key) {
-    if (!self->Initialized) Panic("Hash map not initialized.");
-
-    u32 index = hash(self->KeyType, key);
-    while (!available(self, index)) {
-        if (isKeyMatched(self, index, key)) {
-            return self->Table[index].value;
-        }
-
-        index = (index + 1) % HASH_TABLE_SIZE;
-    }
-
-    return NULL;
-}
-
-static void Put(HashTable* self, void* key, void* value) {
-    if (!self->Initialized) Panic("Hash map not initialized.");
-
-    u32 index = hash(self->KeyType, key);
-    while (!available(self, index)) {
-        if (isKeyMatched(self, index, key)) {
-            self->Table[index].value = value;
-            return;
-        }
-
-        index = (index + 1) % HASH_TABLE_SIZE;
-    }
-
-    self->Table[index].key = key;
-    self->Table[index].value = value;
-    self->Table[index].Available = FALSE;
-}
-
-static void Delete(HashTable* self, void* key) {
-    if (!self->Initialized) Panic("Hash map not initialized.");
-
-    u32 index = hash(self->KeyType, key);
-    while (!available(self, index)) {
-        if (isKeyMatched(self, index, key)) {
-            self->Table[index].Available = TRUE;
-            self->Table[index].key = self->Table[index].value = NULL;
-            return;
-        }
-
-        index = (index + 1) % HASH_TABLE_SIZE;
-    }
-}
 
 HashTable* NewMap(char* keyType, char* valueType) {
     HashTable* result = (HashTable*)Malloc(sizeof(HashTable));
@@ -71,6 +26,8 @@ HashTable* NewMap(char* keyType, char* valueType) {
         result->Table[i].key = result->Table[i].value = NULL;
     }
     result->KeyType = keyType;
+    if (StringEqual(valueType, "PhysicalAddress") || StringEqual(valueType, "PCB*")) 
+        valueType = "u32";
     result->ValueType = valueType;
     result->Initialized = TRUE;
     result->Get = Get;
@@ -83,6 +40,7 @@ void DeleteMap(HashTable** map) {
     if (!(*map)->Initialized) Panic("Hash map not initialized.");
     Free(*map);
 }
+
 
 static u32 hash(char* keyType, void* key) {
     u32 k = -1;
@@ -118,4 +76,66 @@ static Boolean isKeyMatched(HashTable* map, u32 index, void* key) {
         }
     }
     Panic("Unknown key type: {%s} in hash function.", map->KeyType);
+}
+
+static void* Get(HashTable* self, void* key) {
+    if (!self->Initialized) Panic("Hash map not initialized.");
+
+    u32 index = hash(self->KeyType, key);
+    while (!available(self, index)) {
+        if (isKeyMatched(self, index, key)) {
+            return self->Table[index].value;
+        }
+
+        index = (index + 1) % HASH_TABLE_SIZE;
+        if (index == hash(self->KeyType, key)) {
+            // Hash表被插满
+            break;
+        }
+    }
+
+    return NULL;
+}
+
+static void Put(HashTable* self, void* key, void* value) {
+    if (!self->Initialized) Panic("Hash map not initialized.");
+
+    u32 index = hash(self->KeyType, key);
+    while (!available(self, index)) {
+        // key存在，更新value
+        if (isKeyMatched(self, index, key)) {
+            self->Table[index].value = value;
+            return;
+        }
+
+        index = (index + 1) % HASH_TABLE_SIZE;
+        if (index == hash(self->KeyType, key)) {
+            // Hash表被插满
+            Panic("Hash table is full.");
+        }
+    }
+
+    // key不存在，插入
+    self->Table[index].key = key;
+    self->Table[index].value = value;
+    self->Table[index].Available = FALSE;
+}
+
+static void Delete(HashTable* self, void* key) {
+    if (!self->Initialized) Panic("Hash map not initialized.");
+
+    u32 index = hash(self->KeyType, key);
+    while (!available(self, index)) {
+        if (isKeyMatched(self, index, key)) {
+            self->Table[index].Available = TRUE;
+            self->Table[index].key = self->Table[index].value = NULL;
+            return;
+        }
+
+        index = (index + 1) % HASH_TABLE_SIZE;
+        if (index == hash(self->KeyType, key)) {
+            // Hash表被插满，说明删除了不存在的key
+            return;
+        }
+    }
 }

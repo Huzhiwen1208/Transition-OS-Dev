@@ -90,3 +90,7 @@ const u8 IdeCommandRead = 0x20;
 const u8 IdeCommandWrite = 0x30;
 const u8 IdeCommandIdentify = 0xEC;
 const u8 IdeCommandDiagnostic = 0x90;
+
+// 文件系统
+const u32 BlockCacheStart = 0x3f0000; // 磁盘块缓存起始地址, 4MB-64KB位置
+const u32 BlockCacheEnd = 0x400000; // 磁盘块缓存结束地址, 4MB位置, 缓冲64KB=128块，合理使用Hash表
