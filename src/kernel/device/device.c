@@ -4,8 +4,13 @@
 static Device* devices[DEVICE_COUNT];
 
 
-static Device* getDeviceByID(u32 deviceID);
+Device* GetDeviceByID(u32 deviceID) {
+    if (deviceID >= DEVICE_COUNT) {
+        return NULL;
+    }
 
+    return devices[deviceID];
+}
 
 void InitializeDevice() {
     for (u32 i = 0; i < DEVICE_COUNT; i++) {
@@ -47,7 +52,7 @@ u32 UninstallDevice(Device* device) {
 }
 
 void DeviceIoctl(u32 deviceID, u32 cmd, void *arg) {
-    Device *device = getDeviceByID(deviceID);
+    Device *device = GetDeviceByID(deviceID);
     if (device == NULL) {
         return -1;
     }
@@ -60,7 +65,7 @@ void DeviceIoctl(u32 deviceID, u32 cmd, void *arg) {
 }
 
 i32 DeviceRead(u32 deviceID, u64 offset, u32 size, void *buffer) {
-    Device *device = getDeviceByID(deviceID);
+    Device *device = GetDeviceByID(deviceID);
     if (device == NULL) {
         return -1;
     }
@@ -74,7 +79,7 @@ i32 DeviceRead(u32 deviceID, u64 offset, u32 size, void *buffer) {
 }
 
 i32 DeviceWrite(u32 deviceID, u64 offset, u32 size, void *buffer) {
-    Device *device = getDeviceByID(deviceID);
+    Device *device = GetDeviceByID(deviceID);
     if (device == NULL) {
         return -1;
     }
@@ -84,13 +89,4 @@ i32 DeviceWrite(u32 deviceID, u64 offset, u32 size, void *buffer) {
     }
 
     return device->Write(device->DevicePtr, offset, size, buffer);
-}
-
-
-static Device* getDeviceByID(u32 deviceID) {
-    if (deviceID >= DEVICE_COUNT) {
-        return NULL;
-    }
-
-    return devices[deviceID];
 }

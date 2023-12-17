@@ -56,7 +56,7 @@ extern const u32 PageSize;
 extern const u32 PageSizeBits;
 #define MAX_PAGE_COUNT 8192
 extern const u32 KernelPageCount;
-#define BUDDY_PAGES 16
+#define BUDDY_PAGES 32
 #define BUDDY_BLOCKS 1024
 
 // Process Mode
@@ -159,3 +159,4 @@ extern const u8 IdeCommandDiagnostic; // 诊断命令
 // 文件系统
 extern const u32 BlockCacheStart; // 磁盘块缓存起始地址
 extern const u32 BlockCacheEnd;   // 磁盘块缓存结束地址
+#define INODE_DIRECT_BLOCKS 27

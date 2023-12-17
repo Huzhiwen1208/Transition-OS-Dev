@@ -5,6 +5,9 @@ static void PageFaultHandler(u32 vector) {
 
     VirtualAddress addr = GetCR2();
     Assert(addr >= 0x400000); // 确保不是内核地址缺页，因为内核地址都被恒等映射了
+    if (addr < 0x1000) {
+        Panic("Null pointer exception!");
+    }
     MapPage(addr);
 }
 

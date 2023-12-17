@@ -67,7 +67,7 @@ void InitializeIdeDisk() {
             disk->S = param->Sectors;
             Free(param);
             
-            Info("find disk{%s}, total sectors: %d", disk->Name, disk->TotalSector);
+            // Info("find disk{%s}, total sectors: %d", disk->Name, disk->TotalSector);
             Device* device = (Device*)Malloc(sizeof(Device));
             MemoryCopy(device->Name, disk->Name, NAME_LENGTH);
             device->DevicePtr = disk;

@@ -100,6 +100,12 @@ make debug # should use vscode launch.json with gdb
 <div align=center><img src="images/disk_read.jpg" width="50%" height="50%"></div>
 <div align=center><img src="images/disk_write.jpg" width="50%" height="50%"></div>
 
+## 文件系统Inode
+- 对应分支：feat/fs
+- 内容概述：我们首先使用[3f0000, 400000)的64KB内核内存空间创建了磁盘的块缓冲区。
+- 详情链接：[文件系统]()
+
+
 ## FAQ
 0. Mac和Ubuntu中的bximage命令中，需要使用-func代替-mode来创建硬盘，而Deepin只需要使用-mode选项。
 1. 在本操作系统开发中，我们关闭了所有的warning（据说linux开发把所有的warning看成error）。并且数组下标越界是没有Warning和Error的，所以在开发中如果出现了下标越界，可能访问到其他我们并不想读/写的数据，所以需要严谨对待数组下标越界。

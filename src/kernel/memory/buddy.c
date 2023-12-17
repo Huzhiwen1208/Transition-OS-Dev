@@ -62,7 +62,7 @@ void Free(PhysicalAddress address) {
 }
 
 void globalBuddyAllocatorInit() {
-    for (Size i = 0; i < BUDDY_PAGES; i++) {
+    for (Size i = 0; i < BUDDY_BLOCKS; i++) {
         globalBuddyAllocator.Blocks[i].BaseAddress = 0;
         globalBuddyAllocator.Blocks[i].BlockSize = 0;
         globalBuddyAllocator.Blocks[i].IsUsed = FALSE;
@@ -99,6 +99,7 @@ static i32 getFreeBlockIndex() {
 }
 
 static void freeBlock(i32 index) {
+    Assert(index < BUDDY_BLOCKS);
     globalBuddyAllocator.Blocks[index].Next = 0;
 }
 

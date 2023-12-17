@@ -47,6 +47,7 @@ ifeq ($(wildcard $(TARGET)),)
 	@mkdir -p $(TARGET)/user
 	@mkdir -p $(TARGET)/kernel/device
 	@mkdir -p $(TARGET)/kernel/disk
+	@mkdir -p $(TARGET)/kernel/fs
 endif
 
 # .c, .asm ---> .o ------

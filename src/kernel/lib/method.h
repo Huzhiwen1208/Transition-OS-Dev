@@ -44,6 +44,8 @@ Boolean IsDigit(char c);
 Boolean IsAlpha(char c);
 Boolean IsUpper(char c);
 Boolean IsLower(char c);
+Boolean StringStartWith(const String str1, const String start);
+u32 CharCount(const String str, char ch);
 
 // print
 Size Printf(const char *fmt, ...);

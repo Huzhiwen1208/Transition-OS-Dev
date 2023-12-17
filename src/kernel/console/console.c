@@ -17,7 +17,7 @@ static void clearScreen();
 static void ConsoleAlignLine();
 
 Size ConsoleWriteWithColor(const char* buf, Size len, ConsoleColor color) {
-    if (color != WHITE) {
+    if (color != WHITE && color != LIGHT_BLUE) {
         ConsoleAlignLine();
     }
     // 1. find cursor position in byte
