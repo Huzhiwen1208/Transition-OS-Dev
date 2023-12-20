@@ -27,3 +27,7 @@ Boolean ReadFileLine(String path, u32 n, String buf);
 Boolean WriteFileContent(String path, String content, Boolean trunc);
 // cat命令，打印文件内容 cat -n 5 path指打印文件前n行
 Boolean PrintFileContent(String path, u32 n);
+// rm命令，删除指定文件或者目录，如果是目录，那么需要加上-r选项
+// rm [-r] /x/y/z    rm [-r] ./x/y/* 
+// TODO: 暂不支持递归删除，后续支持！
+Boolean RemoveFile(String option, String path);

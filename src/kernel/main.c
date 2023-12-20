@@ -19,21 +19,21 @@ void TransitionMain() {
     InitializeFileSystem();
     
     CreateFile(-1, "test.txt", FT_FILE);
-    WriteFileContent("test.txt", "Hello, world2222!\n", FALSE);
-    WriteFileContent("test.txt", "Hello, world3333!\n", FALSE);
+    CreateFile(-1, "test2.txt", FT_FILE);
+    ListFiles("", "/");
+    WriteFileContent("/test.txt", "Hello World!", FALSE);
+    PrintFileContent("test.txt", 1);
 
-    char buf[100];
-    ReadFileLine("test.txt", 1, buf);
-    Printf("Read: %s\n", buf);
-    MemoryFree(buf, 100);
-    ReadFileLine("test.txt", 2, buf);
-    Printf("Read: %s\n", buf);
+    MakeDirectory("/test", "");
+    MakeDirectory("/testdir/x1", "-p");
+    MakeDirectory("/testdir/x33", "-p");
+    ChangeDirectory("/testdir/");
+    ListFiles("", ".");
+    ChangeDirectory("/");
 
-    ClearFileContent("test.txt");
-    MemoryFree(buf, 100);
-    Boolean read = ReadFileLine("test.txt", 1, buf);
-    Assert(read == FALSE);
-    Assert(StringLength(buf) == 0);
+    ListFiles("", ".");
+    RemoveFile("-r", "/testdir");
+    ListFiles("", "/");
 
     // CreateUserProcess(UserTest);
 }
