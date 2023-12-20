@@ -26,15 +26,147 @@ static void freeOneDataBlockID(u32 blockID);
 /// @param id 目录的InodeID，不存在则返回0
 static InodeID findInodeIDByNameFromDirectory(InodeID id, String name);
 static Boolean isDirectory(InodeID id);
+static Boolean isFile(InodeID id);
+static InodeID pathToInodeID(String path);
+static void pathBackStep(String path);
 
 // public methods
 
-// pwd命令
 void PrintfWorkingDirectory() {
     Printf("%s\n", currentPath);
 }
 
-// cd命令，切换当前目录到path下，如果path不存在或者不是目录，则不切换并抛出错误信息
+Boolean ClearFileContent(String path) {
+    InodeID id = pathToInodeID(path);
+    if (!isFile(id)) {
+        PrintWithColor(LIGHT_RED, "clear: %s: Is not file\n", path);
+        return FALSE;
+    }
+
+    DiskInode* fileInode = readDiskInode(id);
+    u32 size = fileInode->Size;
+    u32 blocks = (size + 511) / 512; // 向上取整
+
+    if (blocks > INODE_DIRECT_BLOCKS) {
+        Panic("[ClearFileContent] indirect inode is not implemented");
+    }
+
+    for (u32 i = 0; i < blocks; i++) {
+        u32 blockID = fileInode->DirectBlock[i];
+        freeOneDataBlockID(blockID);
+        fileInode->DirectBlock[i] = 0;
+    }
+    fileInode->Size = 0;
+
+    writeDiskInode(id, fileInode);
+    Free(fileInode);
+}
+
+Boolean ReadFileLine(String path, u32 n, String buf) {
+    InodeID id = pathToInodeID(path);
+    if (!isFile(id)) {
+        PrintWithColor(LIGHT_RED, "cat: %s: Is not file\n", path);
+        return FALSE;
+    }
+
+    if (n == 0) {
+        buf[0] = '\0';
+        return  TRUE;
+    }
+
+    DiskInode* fileInode = readDiskInode(id);
+    u32 size = fileInode->Size;
+    u32 blocks = (size + 511) / 512; // 向上取整
+
+    u32 cnt = 0; // \n的个数
+    u32 k = 0;
+    for (u32 i = 0; i < blocks; i++) {
+        u32 blockID = fileInode->DirectBlock[i];
+        u8 buffer[512];
+        DiskCacheRead(blockID, buffer);
+        for (u32 j = 0; j < 512; j++) {
+            if (buffer[j] == '\n') {
+                cnt ++;
+                continue;
+            }
+            if (cnt >= n) {
+                buf[k++] = '\0';
+                return TRUE;
+            }
+            if (cnt == n - 1) {
+                buf[k++] = buffer[j];
+            }
+        }
+    }
+
+    return FALSE;
+}
+
+Boolean WriteFileContent(String path, String content, Boolean trunc) {
+    InodeID id = pathToInodeID(path);
+    // 如果是目录，那么就报错
+    if (!isFile(id)) {
+        return FALSE;
+    }
+
+    if (trunc) {
+        ClearFileContent(id);
+    }
+
+    // 写入
+    DiskInode* fileInode = readDiskInode(id);
+    u32 size = fileInode->Size;
+    // 如果是正好写满了x块，那么需要申请一块新的块
+    if (size % 512 == 0) {
+        fileInode->DirectBlock[size / 512] = allocateOneDataBlockID();
+    }
+
+    u32 blockID = fileInode->DirectBlock[size / 512];
+    u8 buffer[512];
+    DiskCacheRead(blockID, buffer);
+    MemoryCopy(buffer + size%512, content, StringLength(content));
+    DiskCacheWrite(blockID, buffer);
+
+    // 更新文件大小
+    fileInode->Size += StringLength(content);
+    writeDiskInode(id, fileInode);
+
+    Free(fileInode);
+    return TRUE;
+}
+
+Boolean PrintFileContent(String path, u32 n) {
+    InodeID id = pathToInodeID(path);
+    if (!isFile(id)) {
+        PrintWithColor(LIGHT_RED, "cat: %s: Is not file\n", path);
+        return FALSE;
+    }
+
+    if (n == 0) {
+        Printf("\n");
+        return  TRUE;
+    }
+
+    DiskInode* fileInode = readDiskInode(id);
+    u32 size = fileInode->Size;
+    u32 blocks = (size + 511) / 512; // 向上取整
+
+    for (u32 i = 0; i < blocks; i++) {
+        u32 blockID = fileInode->DirectBlock[i];
+        u8 buffer[512];
+        DiskCacheRead(blockID, buffer);
+        for (u32 j = 0; j < 512; j++) {
+            Printf("%c", buffer[j]);
+            if (buffer[j] == '\n') {
+                if (--n == 0) {
+                    Free(fileInode);
+                    return TRUE;
+                }
+            }
+        }
+    }
+}
+
 Boolean ChangeDirectory(String path) {
     /*
     * 我们实现了绝对路径和相对路径寻址，其他类型的路径均基于这两种路径进行转换调用
@@ -221,7 +353,6 @@ Boolean ChangeDirectory(String path) {
     return TRUE;
 }
 
-// linux中的ls初步实现，现在只支持-a，例如：ls -a /home/hzw 或者 ls -a ./abc/abdcd，暂不支持../abc/abdcd
 void ListFiles(String option, String path) {
     if (StringStartWith(path, "..")) {
         PrintWithColor(LIGHT_RED, "ls: do not support .. mode");
@@ -357,7 +488,6 @@ void ListFiles(String option, String path) {
     Free(temp);
 }
 
-// mkdir [-p] path，path可以为相对路径，也可以为绝对路径，但是我们暂时不支持..模式
 Boolean MakeDirectory(String path, String option) {
     if (StringStartWith(path, "..")) {
         PrintWithColor(LIGHT_RED, "mkdir: do not support .. mode");
@@ -465,11 +595,6 @@ Boolean MakeDirectory(String path, String option) {
     return result;
 }
 
-/// @brief 在inodeID指定的目录下创建文件，文件名为name，文件类型为type，如果id==-1, 那么就在当前目录下创建文件
-/// @param id 目录的InodeID
-/// @param name 文件名
-/// @param type 文件类型
-/// @return 创建成功返回创建文件的InodeID，否则返回-1
 InodeID CreateFile(InodeID id, String name, FileType type) {
     if (CharCount(name, '/')) {
         PrintWithColor(LIGHT_RED, "touch: filename should not contain '/'\n");
@@ -702,10 +827,15 @@ static u32 allocateOneDataBlockID() {
 static void freeOneDataBlockID(u32 blockID) {
     easyFileSystem.rlock->Lock(easyFileSystem.rlock);
 
+    // 清空内容
+    u8 buffer[512];
+    MemoryFree(buffer, 512);
+    DiskCacheWrite(blockID, buffer);
+
+    // 清空位图的指定位
     u32 id = blockID - easyFileSystem.DataAreaStartBlockID;
     u32 blockID2 = easyFileSystem.DataBitMap->StartBlockID + id / (512 * 8);
     u32 offset = (id % (512 * 8)) / 8;
-    u8 buffer[512];
     DiskCacheRead(blockID2, buffer);
     u8 byte = buffer[offset];
     byte &= ~(1 << (id % 8));
@@ -748,4 +878,123 @@ static Boolean isDirectory(InodeID id) {
 
     Free(diskInode);
     return result;
+}
+
+static Boolean isFile(InodeID id) {
+    Boolean result = FALSE;
+    DiskInode* diskInode = readDiskInode(id);
+    result = diskInode->Type == FT_FILE;
+
+    Free(diskInode);
+    return result;
+}
+
+static InodeID pathToInodeID(String path) {
+    if (StringEqual(path, ".") || StringEqual(path, "./")) {
+        return currentDirectoryInodeID;
+    }
+
+    if (CharCount(path, '/') == 0) {
+        return findInodeIDByNameFromDirectory(currentDirectoryInodeID, path);
+    }
+
+    char temp[256];
+    if (StringStartWith(path, "..")) {
+        if (currentDirectoryInodeID == 0) {
+            return StringLength(path) <= 3 ? 0 : pathToInodeID(path + 2);
+        }
+
+        MemoryFree(temp, 256);
+        MemoryCopy(temp, currentPath, StringLength(currentPath) + 1);
+        pathBackStep(temp);
+        
+        // 转换为绝对路径
+        if (StringLength(path) > 3) {
+            if (StringEqual(temp, "/"))
+                MemoryCopy(temp + 1, path + 3, StringLength(path + 3) + 1);
+            else 
+                MemoryCopy(temp + StringLength(temp), path + 2, StringLength(path + 2) + 1);
+        }
+    }
+
+    if (StringStartWith(path, "/")) {
+        MemoryCopy(temp, path, StringLength(path) + 1);
+    }
+
+    // 只剩下相对路径
+    if (StringStartWith(path, ".")) {
+        if (StringLength(path) <= 2) {
+            return currentDirectoryInodeID;
+        }
+
+        MemoryCopy(temp, currentPath, StringLength(currentPath) + 1);
+        if (StringEqual(temp, "/"))
+            MemoryCopy(temp + 1, path + 2, StringLength(path + 2) + 1);
+        else 
+            MemoryCopy(temp + StringLength(temp), path + 1, StringLength(path + 1) + 1);
+    } else {
+        MemoryCopy(temp, currentPath, StringLength(currentPath) + 1);
+        if (StringEqual(temp, "/"))
+            MemoryCopy(temp + 1, path, StringLength(path) + 1);
+        else {
+            MemoryCopy(temp + StringLength(temp), "/", 2);
+            MemoryCopy(temp + StringLength(temp), path, StringLength(path) + 1);
+        }
+    }
+
+    Debug("pathToInodeID: %s\n", temp);
+
+    // 处理temp绝对路径问题
+    char name[28];
+    u32 k = 0;
+    InodeID id = 0;
+    for (u32 i = 1; temp[i]; i++) {
+        if (temp[i] != '/') {
+            name[k++] = temp[i];
+            continue;
+        }
+
+        // 找到一个目录Name, 切换目录InodeID
+        InodeID nextID = findInodeIDByNameFromDirectory(id, name);
+        // 如果不存在
+        if (nextID == 0) {
+            return -1;
+        }
+
+        id = nextID;
+        // 重置name
+        k = 0;
+        MemoryFree(name, 28);
+    }
+    if (k) {
+        // 处理 /x/y/z这种情况的z
+        InodeID nextID = findInodeIDByNameFromDirectory(id, name);
+        if (nextID == 0) {
+            return -1;
+        }
+        id = nextID;
+        MemoryFree(name, 28);
+        k = 0;
+    }
+
+    return id;
+}
+
+static void pathBackStep(String path) {
+    if (StringEqual(path, "/")) {
+        return;
+    }
+
+    if (CharCount(path, '/') == 1) {
+        path[1] = '\0';
+        return;
+    }
+
+    u32 len = StringLength(path);
+    for (u32 i = len - 1; i >= 0; i--) {
+        if (path[i] == '/') {
+            path[i] = '\0';
+            break;
+        }
+    }
 }

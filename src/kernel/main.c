@@ -18,34 +18,22 @@ void TransitionMain() {
     InitializeDevice();
     InitializeFileSystem();
     
-    // InodeID id = CreateFile(-1, "/test.txt", FT_FILE);
     CreateFile(-1, "test.txt", FT_FILE);
-    CreateFile(-1, "test1.txt", FT_FILE);
-    CreateFile(-1, "test2.txt", FT_FILE);
-    CreateFile(-1, "test3.txt", FT_FILE);
-    CreateFile(-1, "test4.txt", FT_FILE);
-    CreateFile(-1, "test5.txt", FT_FILE);
-    MakeDirectory("/dir/dir2", "-p");
-    MakeDirectory("/dir/dir2/dir3", "-p");
-    MakeDirectory("/dir/dir6/dir3", "-p");
-    MakeDirectory("/dir2/dir2/dir3", "-p");
-    MakeDirectory("/dir2/dir2/dir3", "-p");
-    MakeDirectory("/dir2/dir2/dir3", "-p");
-    CreateFile(-1, "test23.txt", FT_FILE);
-    ListFiles("-a", "/");
-    PrintfWorkingDirectory();
-    ChangeDirectory("dir");
-    ChangeDirectory("..");
-    ChangeDirectory("./dir");
-    ChangeDirectory("../");
-    ChangeDirectory("dir");
-    ListFiles("-a", ".");
-    PrintfWorkingDirectory();
-    ChangeDirectory("../dir2/");
-    ListFiles("-a", ".");
-    PrintfWorkingDirectory();
-    ChangeDirectory("./dir2");
-    PrintfWorkingDirectory();
-    
+    WriteFileContent("test.txt", "Hello, world2222!\n", FALSE);
+    WriteFileContent("test.txt", "Hello, world3333!\n", FALSE);
+
+    char buf[100];
+    ReadFileLine("test.txt", 1, buf);
+    Printf("Read: %s\n", buf);
+    MemoryFree(buf, 100);
+    ReadFileLine("test.txt", 2, buf);
+    Printf("Read: %s\n", buf);
+
+    ClearFileContent("test.txt");
+    MemoryFree(buf, 100);
+    Boolean read = ReadFileLine("test.txt", 1, buf);
+    Assert(read == FALSE);
+    Assert(StringLength(buf) == 0);
+
     // CreateUserProcess(UserTest);
 }
